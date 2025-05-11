@@ -1,5 +1,7 @@
 import { MODEL } from "@/config/constants";
 import { NextResponse } from "next/server";
+// Import the web-standards shim for Edge runtime compatibility
+import 'openai/shims/web';
 import OpenAI from "openai";
 
 // Configure route to use Edge Runtime for Cloudflare Pages
@@ -12,33 +14,40 @@ export async function POST(request: Request) {
 
     // Check if API key is available and log (safely - only for debugging)
     const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+      console.error("OPENAI_API_KEY environment variable not set");
+      return NextResponse.json({ error: "API key configuration error" }, { status: 500 });
+    }
     console.log("API Key available:", !!apiKey);
     
     const openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
     });
 
-    const response = await openai.chat.completions.create({
+    const events = await openai.responses.create({
       model: MODEL,
-      messages: messages,
+      input: messages,
       tools,
       stream: true,
+      parallel_tool_calls: false,
     });
 
     // Create a ReadableStream that emits SSE data
     const stream = new ReadableStream({
       async start(controller) {
         try {
-          for await (const chunk of response) {
+          for await (const event of events) {
+            // Sending all events to the client
             const data = JSON.stringify({
-              event: 'message',
-              data: chunk.choices[0]?.delta,
+              event: event.type,
+              data: event,
             });
             controller.enqueue(`data: ${data}\n\n`);
           }
+          // End of stream
           controller.close();
         } catch (error) {
-          console.error("Stream error:", error);
+          console.error("Error in streaming loop:", error);
           controller.error(error);
         }
       },
@@ -54,9 +63,15 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error("Error in POST handler:", error);
+    // Enhanced error information
+    const errorDetail = error instanceof Error ? 
+      { message: error.message, name: error.name, stack: error.stack } : 
+      "Unknown error";
+      
     return NextResponse.json(
       {
         error: error instanceof Error ? error.message : "Unknown error",
+        detail: errorDetail
       },
       { status: 500 }
     );

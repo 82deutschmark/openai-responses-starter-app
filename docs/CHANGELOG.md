@@ -24,6 +24,11 @@ This file tracks all significant changes made to the OpenAI Responses Starter Ap
   - Fixed 500 errors by explicitly providing OpenAI API key in all API routes
   - Modified API route files to initialize OpenAI client at runtime instead of build time
   - Fixed deployment error related to OpenAI API key during build process
+- Enhanced Edge Runtime compatibility - 2025-05-11 at 15:22
+  - Added web-standards shim (`import 'openai/shims/web'`) to the OpenAI API route
+  - Improved error handling with detailed error information in API responses
+  - Added explicit API key checking with informative error messages
+  - Fixed 500 error in `/api/turn_response` endpoint in Cloudflare deployment
 - Verified OpenAI model configuration - 2025-05-11 at 12:50
   - Confirmed the application is using "gpt-4.1-nano-2025-04-14" model throughout
   - Model constant is properly defined in config/constants.ts
