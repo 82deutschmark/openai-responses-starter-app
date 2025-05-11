@@ -5,18 +5,16 @@ export const runtime = 'edge';
 
 export async function POST(request: Request) {
   // Access Cloudflare Pages context - in production this will be available via request
-  const context = (request as any).context;
+  // const context = (request as any).context; // Removed: request.context.env is not reliable here
   
-  // Try to get API key from Cloudflare context, fall back to process.env for local development
-  let apiKey = context?.env?.OPENAI_API_KEY;
-  if (!apiKey) {
-    apiKey = process.env.OPENAI_API_KEY;
-  }
+  // Try to get API key from process.env (expected with nodejs_compat on Cloudflare)
+  const apiKey = process.env.OPENAI_API_KEY;
   
   if (!apiKey) {
-    console.error("OPENAI_API_KEY environment variable not set");
-    return new Response("API key configuration error", { status: 500 });
+    console.error("OPENAI_API_KEY environment variable not found via process.env");
+    return new Response("API key configuration error: OPENAI_API_KEY not found in process.env", { status: 500 });
   }
+  console.log("OPENAI_API_KEY obtained from process.env:", !!apiKey);
 
   const openai = new OpenAI({
     apiKey: apiKey,
@@ -41,8 +39,7 @@ export async function POST(request: Request) {
       JSON.stringify({
         error: "Error uploading file", 
         detail: error instanceof Error ? error.message : "Unknown error",
-        contextAvailable: !!context,
-        envAvailable: !!context?.env
+        apiKeyFoundViaProcessEnv: !!process.env.OPENAI_API_KEY
       }), 
       { status: 500 }
     );

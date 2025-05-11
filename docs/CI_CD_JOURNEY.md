@@ -31,9 +31,19 @@
 - Replaced OpenAI SDK with direct fetch implementation for maximum compatibility
 - Implemented diagnostic endpoint to test Web API features in production
 - Improved error logging and diagnostics in all API routes
+- Fixed environment variable access pattern (`context.env` vs `process.env`)
+- Resolved Next.js TypeScript compatibility issues with route handlers
+- Created comprehensive troubleshooting documentation
 - Maintained detailed changelog and documented every step
-- Conclusion: Edge runtime debugging is non-trivial; even best practices and official docs may not cover all edge cases
-- Next steps: Use diagnostic endpoint, analyze logs, and continue iterative debugging until resolved
+
+### 5. Key Insights for Cloudflare Pages Deployments (2025-05-11)
+- Cloudflare Pages Functions are Workers under the hood with different environment access
+- Environment variables must be accessed via `context.env` in Cloudflare, not `process.env`
+- Next.js route handlers require specific coding patterns for Cloudflare compatibility
+- Best approach: `const context = (request as any).context` to access Cloudflare environment
+- Implement fallbacks for local development: `apiKey = context?.env?.API_KEY || process.env.API_KEY`
+- Enhanced error handling and logging are critical for troubleshooting deployments
+- Build errors with TypeScript are often related to parameter type conflicts
 
 ### 3. Key Lessons Learned
 

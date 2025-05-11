@@ -48,10 +48,22 @@ Cloudflare Pages Functions are Workers under the hood. 500 errors typically happ
 
 **Solution**:
 - Add API keys under **Pages → Settings → Environment Variables**
-- Access via `env.OPENAI_API_KEY` in the handler, NOT `process.env.OPENAI_API_KEY`
-- Example: `export const onRequestPost: PagesFunction = async ({ env }) => { if (!env.OPENAI_API_KEY) throw new Error('Key missing'); };`
+- In Next.js route handlers: Access via `const context = (request as any).context` and then `context?.env?.OPENAI_API_KEY`
+- In Cloudflare Workers: Access via `env.OPENAI_API_KEY` as in `export const onRequestPost: PagesFunction = async ({ env }) => {}`
+- Do not use `process.env.OPENAI_API_KEY` as it won't work in Cloudflare deployment
+- Implement a fallback for local development: `apiKey = context?.env?.OPENAI_API_KEY || process.env.OPENAI_API_KEY`
 
-### 4. Bundle Size & SDK Compatibility
+### 4. Next.js Type Compatibility
+
+**Issue**: Next.js route handler types conflict with Cloudflare Pages context parameter
+
+**Solution**:
+- Don't add custom interface parameters to route handlers (causes build errors)
+- Access Cloudflare context through `(request as any).context` without modifying function signature
+- Use standard Next.js route handler pattern: `export async function POST(request: Request)`
+- Avoid custom interface types in route handler parameters
+
+### 5. Bundle Size & SDK Compatibility
 
 **Issue**: Large bundles or SDK incompatibilities can cause silent 500 errors
 

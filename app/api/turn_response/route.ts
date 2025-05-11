@@ -7,36 +7,25 @@ import { NextResponse } from "next/server";
 export const runtime = 'edge';
 
 export async function POST(request: Request) {
-  // Access Cloudflare Pages context - in production this will be available via request
-  // We cast to any to avoid type errors while still allowing access to the context
-  const context = (request as any).context;
   try {
     const { messages, tools } = await request.json();
     console.log("Received messages:", messages);
 
-    // Get API key - try Cloudflare Pages context first, fall back to process.env for local development
-    // CRITICAL: In Cloudflare Pages Functions, env vars must be accessed via context.env
-    let apiKey = context?.env?.OPENAI_API_KEY;
-    
-    // Fall back to process.env only in development/local environment
-    if (!apiKey) {
-      apiKey = process.env.OPENAI_API_KEY;
-    }
+    // Get API key - with nodejs_compat, process.env is the way in Cloudflare Pages Functions
+    const apiKey = process.env.OPENAI_API_KEY;
     
     if (!apiKey) {
-      console.error("OPENAI_API_KEY environment variable not set");
-      return NextResponse.json({ error: "API key configuration error" }, { status: 500 });
+      console.error("OPENAI_API_KEY environment variable not found via process.env");
+      return NextResponse.json({ error: "API key configuration error: OPENAI_API_KEY not found in process.env" }, { status: 500 });
     }
     
-    console.log("API Key available:", !!apiKey);
-    console.log("Context available:", !!context);
+    console.log("OPENAI_API_KEY obtained from process.env:", !!apiKey);
     
     // Create a ReadableStream that will handle our fetch + streaming
     const stream = new ReadableStream({
       async start(controller) {
         try {
-          // Log the complete context for debugging (excluding the actual API key value)
-          console.log('Context available:', !!context, 'env available:', !!context?.env);
+          console.log('Attempting to use API Key (obtained from process.env)');
           // Direct fetch to OpenAI API (most compatible with Edge runtime)
           const response = await fetch('https://api.openai.com/v1/responses', {
             method: 'POST',
@@ -116,9 +105,7 @@ export async function POST(request: Request) {
         message: error.message, 
         name: error.name, 
         stack: error.stack,
-        contextAvailable: !!context,
-        envAvailable: !!context?.env,
-        apiKeyAvailable: !!context?.env?.OPENAI_API_KEY 
+        apiKeyFoundViaProcessEnv: !!process.env.OPENAI_API_KEY
       } : 
       "Unknown error";
       
