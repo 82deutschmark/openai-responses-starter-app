@@ -4,7 +4,7 @@
 name = "openai-responses-starter-app"
 
 # This is the path to deployment artifacts
-pages_build_output_dir = ".vercel/output/public"
+pages_build_output_dir = ".vercel/output/static"
 
 # Environment variables
 [vars]
