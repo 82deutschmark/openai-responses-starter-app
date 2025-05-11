@@ -18,30 +18,27 @@ export async function POST(request: Request) {
       apiKey: process.env.OPENAI_API_KEY,
     });
 
-    const events = await openai.responses.create({
+    const response = await openai.chat.completions.create({
       model: MODEL,
-      input: messages,
+      messages: messages,
       tools,
       stream: true,
-      parallel_tool_calls: false,
     });
 
     // Create a ReadableStream that emits SSE data
     const stream = new ReadableStream({
       async start(controller) {
         try {
-          for await (const event of events) {
-            // Sending all events to the client
+          for await (const chunk of response) {
             const data = JSON.stringify({
-              event: event.type,
-              data: event,
+              event: 'message',
+              data: chunk.choices[0]?.delta,
             });
             controller.enqueue(`data: ${data}\n\n`);
           }
-          // End of stream
           controller.close();
         } catch (error) {
-          console.error("Error in streaming loop:", error);
+          console.error("Stream error:", error);
           controller.error(error);
         }
       },

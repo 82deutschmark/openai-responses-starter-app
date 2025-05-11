@@ -67,3 +67,6 @@ You are welcome to open issues or submit PRs to improve this app, however, pleas
 
 This project is licensed under the MIT License. See the LICENSE file for details.
 
+## CI/CD Journey
+
+See [CI_CD_JOURNEY.md](docs/CI_CD_JOURNEY.md) for details.
