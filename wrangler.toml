@@ -1,0 +1,27 @@
+# wrangler.toml - Configuration for Cloudflare Pages deployment
+
+name = "openai-responses-app"
+compatibility_date = "2025-05-10"
+
+[build]
+command = "npm run build"
+
+# Critical: This tells Cloudflare where to find the build output
+[site]
+bucket = ".next"
+
+# Enable compatibility with Next.js API routes
+[build.upload]
+format = "service-worker"
+
+# Environment variables
+[vars]
+NEXT_TELEMETRY_DISABLED = "1"
+
+# Ensure proper Node compatibility
+node_compat = true
+
+# Route all API requests to the Edge
+[[routes]]
+pattern = "/api/*"
+script = "Worker"

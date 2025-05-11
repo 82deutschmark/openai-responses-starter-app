@@ -9,7 +9,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "wrangler pages deploy .next --project-name openai-responses-app",
+    "cf:dev": "wrangler pages dev .next --port 8788"
   },
   "dependencies": {
     "@npmcli/fs": "^4.0.0",

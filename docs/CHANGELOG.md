@@ -15,9 +15,12 @@ This file tracks all significant changes made to the OpenAI Responses Starter Ap
 - Set up development environment
   - Configured OpenAI API key in `.env` file
   - Successfully launched local development server
-- Fixed Cloudflare Pages deployment - 2025-05-10 at 23:32
+- Fixed Cloudflare Pages deployment - 2025-05-10 at 23:36
   - Added `.node-version` file to specify Node.js 18.18.0
   - Resolved compatibility issue with Next.js 15.2.3 requirements
+  - Created `wrangler.toml` configuration file for proper Cloudflare deployment
+  - Modified `next.config.mjs` to enable static exports and Cloudflare compatibility
+  - Added Cloudflare deployment scripts to `package.json`
 
 ### Planned Changes
 - TBD based on specific requirements
