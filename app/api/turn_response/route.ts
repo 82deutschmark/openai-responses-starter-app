@@ -58,7 +58,23 @@ export async function POST(request: Request) {
           // Process the stream
           while (true) {
             const { done, value } = await reader.read();
-            if (done) break;
+            if (done) {
+              console.log("Stream reader finished (done is true).");
+              break;
+            }
+
+            // --- BEGIN DETAILED LOGGING FOR STREAM CHUNK ---
+            console.log(`Stream chunk received. Type: ${typeof value}, Is Uint8Array: ${value instanceof Uint8Array}`);
+            if (!(value instanceof Uint8Array)) {
+              console.error('CRITICAL: Stream chunk is NOT a Uint8Array. Value:', value);
+              // Optionally, try to see what it is if not too large or sensitive, converting to string if possible
+              try {
+                console.log('Non-Uint8Array chunk as string (attempt):', String.fromCharCode.apply(null, value as any)); // This might fail or be meaningless
+              } catch (e) {
+                console.error('Could not convert non-Uint8Array chunk to string:', e);
+              }
+            }
+            // --- END DETAILED LOGGING FOR STREAM CHUNK ---
             
             const chunk = decoder.decode(value, { stream: true });
             const lines = chunk

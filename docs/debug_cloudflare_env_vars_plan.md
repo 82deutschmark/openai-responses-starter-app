@@ -37,13 +37,13 @@
 - [x] Review `app/api/vector_stores/upload_file/route.ts` (initial review)
 - [x] Review `README.md` (initial review)
 - [x] **USER ACTION:** Verify `nodejs_compat` flag and compatibility date in Cloudflare settings. Report status to CASCADE. (**DONE** - Enabled, date is current)
-- [ ] **CASCADE ACTION (pending user confirmation):** Modify API routes to prioritize `process.env`. (-> **CASCADE ACTION: Implementing now**)
-- [ ] **USER ACTION (after code changes by CASCADE):** Commit, push, and redeploy on Cloudflare Pages.
-- [ ] **CASCADE ACTION (after deployment):** Test `https://gptpluspro.com/` with Playwright.
-- [ ] **USER ACTION (concurrent with Playwright):** Monitor Cloudflare Function logs.
-- [ ] Consult Cloudflare Pages & Next.js documentation on environment variables (as needed).
-- [ ] Identify root cause of the API failure.
-- [ ] Verify fix on Cloudflare Pages deployment.
-- [ ] Update `docs/CHANGELOG.md`.
-- [ ] Update `docs/EDGE_TROUBLESHOOTING.md`.
-- [ ] Update `README.md` with Cloudflare env var instructions.
+- [x] **CASCADE ACTION (pending user confirmation):** Modify API routes to prioritize `process.env`. (-> **CASCADE ACTION: Implemented**)
+- [x] **USER ACTION (after code changes by CASCADE):** Commit, push, and redeploy on Cloudflare Pages.
+- [x] **CASCADE ACTION (after deployment):** Test `https://gptpluspro.com/` with Playwright.
+- [x] **USER ACTION (concurrent with Playwright):** Monitor Cloudflare Function logs.
+- [ ] Consult Cloudflare Pages & Next.js documentation on environment variables (as needed). (**Largely resolved by debug endpoint**) 
+- [x] Identify root cause of the API failure. (**Initial root cause of API key access seems resolved. New root cause: TypeError: This ReadableStream did not return bytes.**)
+- [ ] **CASCADE ACTION:** Add detailed logging within the stream processing loop in `app/api/turn_response/route.ts` to inspect chunk type and content.
+- [ ] **USER ACTION (after code changes):** Redeploy and re-test by sending a message.
+- [ ] **USER ACTION (concurrently):** Monitor Cloudflare logs for new stream chunk details.
+- [ ] Implement final code fixes (if any, e.g., removing fallback).

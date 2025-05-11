@@ -1,4 +1,4 @@
-# Cloudflare Pages 500 Error Troubleshooting Guide
+#DEPRECATED Cloudflare Pages 500 Error Troubleshooting Guide  OUT OF SYNC
 
 ## Problem Statement
 
