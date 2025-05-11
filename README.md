@@ -17,6 +17,7 @@ Features:
 - Display annotations
 
 This app is meant to be used as a starting point to build a conversational assistant that you can customize to your needs.
+Our prefered model is `gpt-4.1-nano-2025-04-14`.
 
 ## How to use
 
