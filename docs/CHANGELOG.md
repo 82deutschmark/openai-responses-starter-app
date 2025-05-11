@@ -15,6 +15,9 @@ This file tracks all significant changes made to the OpenAI Responses Starter Ap
 - Set up development environment
   - Configured OpenAI API key in `.env` file
   - Successfully launched local development server
+- Fixed Cloudflare Pages deployment - 2025-05-10 at 23:32
+  - Added `.node-version` file to specify Node.js 18.18.0
+  - Resolved compatibility issue with Next.js 15.2.3 requirements
 
 ### Planned Changes
 - TBD based on specific requirements
