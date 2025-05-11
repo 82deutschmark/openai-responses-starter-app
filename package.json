@@ -2,6 +2,7 @@
   "name": "responses-starter-app",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "engines": {
     "node": "^18.18.0 || ^19.8.0 || >= 20.0.0"
   },
@@ -30,7 +31,7 @@
     "highlight.js": "^11.11.1",
     "lucide-react": "^0.441.0",
     "next": "^15.2.3",
-    "openai": "^4.87.3",
+    "openai": "^4.98.0",
     "partial-json": "^0.1.7",
     "react": "^18",
     "react-dom": "^18",
