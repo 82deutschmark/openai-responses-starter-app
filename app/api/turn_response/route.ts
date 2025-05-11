@@ -6,23 +6,35 @@ import { NextResponse } from "next/server";
 // Configure route to use Edge Runtime for Cloudflare Pages
 export const runtime = 'edge';
 
-export async function POST(request: Request) {
+// Define the context interface for Cloudflare Pages Functions
+interface PagesFunctionContext {
+  env: {
+    OPENAI_API_KEY: string;
+    [key: string]: string;
+  };
+  // Other context properties might be available
+}
+
+export async function POST(request: Request, context: PagesFunctionContext) {
   try {
     const { messages, tools } = await request.json();
     console.log("Received messages:", messages);
 
-    // Check if API key is available and log (safely - only for debugging)
-    const apiKey = process.env.OPENAI_API_KEY;
+    // Check if API key is available from the Cloudflare Pages Functions context
+    // CRITICAL: Access env vars via context.env, not process.env in Cloudflare Pages Functions
+    const apiKey = context?.env?.OPENAI_API_KEY;
     if (!apiKey) {
-      console.error("OPENAI_API_KEY environment variable not set");
+      console.error("OPENAI_API_KEY environment variable not set in Cloudflare Pages context");
       return NextResponse.json({ error: "API key configuration error" }, { status: 500 });
     }
-    console.log("API Key available:", !!apiKey);
+    console.log("API Key available from Cloudflare Pages context:", !!apiKey);
     
     // Create a ReadableStream that will handle our fetch + streaming
     const stream = new ReadableStream({
       async start(controller) {
         try {
+          // Log the complete context for debugging (excluding the actual API key value)
+          console.log('Context available:', !!context, 'env available:', !!context?.env);
           // Direct fetch to OpenAI API (most compatible with Edge runtime)
           const response = await fetch('https://api.openai.com/v1/responses', {
             method: 'POST',
@@ -96,9 +108,16 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error("Error in POST handler:", error);
-    // Enhanced error information
+    // Enhanced error information with context debugging
     const errorDetail = error instanceof Error ? 
-      { message: error.message, name: error.name, stack: error.stack } : 
+      { 
+        message: error.message, 
+        name: error.name, 
+        stack: error.stack,
+        contextAvailable: !!context,
+        envAvailable: !!context?.env,
+        apiKeyAvailable: !!context?.env?.OPENAI_API_KEY 
+      } : 
       "Unknown error";
       
     return NextResponse.json(

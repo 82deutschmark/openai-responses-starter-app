@@ -18,6 +18,22 @@
 - Fixed 500 errors by explicitly passing OpenAI API keys
 - Added Node.js compatibility flags (`nodejs_compat`)
 - Set required `compatibility_date` for Cloudflare Workers
+- Switched OpenAI API integration to use web-standards shim, then direct fetch for Edge compatibility
+- Updated OpenAI SDK to latest version, added `type: "module"` to package.json, improved error handling
+- Added `/api/debug` endpoint to diagnose Edge runtime capabilities
+- Despite these efforts, 500 error persists in deployment; further investigation ongoing
+
+---
+
+### 4. Advanced Troubleshooting & Lessons Learned (2025-05-11)
+- Carefully reviewed all Cloudflare Pages and Edge runtime documentation
+- Confirmed environment variables and API keys are present in deployment
+- Replaced OpenAI SDK with direct fetch implementation for maximum compatibility
+- Implemented diagnostic endpoint to test Web API features in production
+- Improved error logging and diagnostics in all API routes
+- Maintained detailed changelog and documented every step
+- Conclusion: Edge runtime debugging is non-trivial; even best practices and official docs may not cover all edge cases
+- Next steps: Use diagnostic endpoint, analyze logs, and continue iterative debugging until resolved
 
 ### 3. Key Lessons Learned
 
