@@ -1,8 +1,10 @@
 import OpenAI from "openai";
 
-const openai = new OpenAI();
+// Don't initialize OpenAI at the top level to prevent build errors
 
 export async function POST(request: Request) {
+  // Initialize OpenAI inside the handler for runtime only
+  const openai = new OpenAI();
   const { vectorStoreId, fileId } = await request.json();
   try {
     const vectorStore = await openai.vectorStores.files.create(
