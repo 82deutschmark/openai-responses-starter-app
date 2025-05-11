@@ -1,3 +1,6 @@
+// Configure route to use Edge Runtime for Cloudflare Pages
+export const runtime = 'edge';
+
 export async function GET() {
   try {
     // Fetch a programming joke

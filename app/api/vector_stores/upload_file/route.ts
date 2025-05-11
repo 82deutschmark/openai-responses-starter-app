@@ -1,5 +1,8 @@
 import OpenAI from "openai";
 
+// Configure route to use Edge Runtime for Cloudflare Pages
+export const runtime = 'edge';
+
 export async function POST(request: Request) {
   const openai = new OpenAI();
   const { fileObject } = await request.json();

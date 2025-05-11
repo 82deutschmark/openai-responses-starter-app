@@ -2,6 +2,9 @@ import { MODEL } from "@/config/constants";
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
+// Configure route to use Edge Runtime for Cloudflare Pages
+export const runtime = 'edge';
+
 export async function POST(request: Request) {
   try {
     const { messages, tools } = await request.json();
