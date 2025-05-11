@@ -1,14 +1,7 @@
-# Cloudflare Pages configuration with @cloudflare/next-on-pages
+# Simple configuration for Cloudflare Pages
 
-# Basic configuration
-name = "openai-responses-app"
-compatibility_date = "2025-05-10"
-
-# This is what Cloudflare Pages is looking for
-pages_build_output_dir = ".vercel/output/static"
-
-# Node.js compatibility
-node_compat = true
+# This is the path to deployment artifacts
+pages_build_output_dir = ".vercel/output/public"
 
 # Environment variables
 [vars]
