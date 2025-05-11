@@ -38,6 +38,12 @@ This file tracks all significant changes made to the OpenAI Responses Starter Ap
   - Implemented manual stream parsing for maximum compatibility
   - Created `/api/debug` diagnostic endpoint to troubleshoot Edge runtime issues
   - Removed all potential Edge runtime incompatibilities by using only core Web APIs
+- Fixed Cloudflare Pages Functions environment variable access - 2025-05-11 at 16:45
+  - Updated all API routes to use Cloudflare Pages Functions context parameter
+  - Changed environment variable access from `process.env.OPENAI_API_KEY` to `context?.env?.OPENAI_API_KEY`
+  - Added proper error handling for missing environment variables
+  - Enhanced error responses with detailed context availability information
+  - Updated the debug endpoint to test both access patterns and report on availability
 - Verified OpenAI model configuration - 2025-05-11 at 12:50
   - Confirmed the application is using "gpt-4.1-nano-2025-04-14" model throughout
   - Model constant is properly defined in config/constants.ts

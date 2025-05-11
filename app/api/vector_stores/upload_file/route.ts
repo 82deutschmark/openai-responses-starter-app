@@ -3,9 +3,24 @@ import OpenAI from "openai";
 // Configure route to use Edge Runtime for Cloudflare Pages
 export const runtime = 'edge';
 
-export async function POST(request: Request) {
+// Define the context interface for Cloudflare Pages Functions
+interface PagesFunctionContext {
+  env: {
+    OPENAI_API_KEY: string;
+    [key: string]: string;
+  };
+}
+
+export async function POST(request: Request, context: PagesFunctionContext) {
+  // Access API key from Cloudflare Pages context instead of process.env
+  const apiKey = context?.env?.OPENAI_API_KEY;
+  if (!apiKey) {
+    console.error("OPENAI_API_KEY environment variable not set in Cloudflare Pages context");
+    return new Response("API key configuration error", { status: 500 });
+  }
+
   const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
+    apiKey: apiKey,
   });
   const { fileObject } = await request.json();
 
@@ -23,6 +38,14 @@ export async function POST(request: Request) {
     return new Response(JSON.stringify(file), { status: 200 });
   } catch (error) {
     console.error("Error uploading file:", error);
-    return new Response("Error uploading file", { status: 500 });
+    return new Response(
+      JSON.stringify({
+        error: "Error uploading file", 
+        detail: error instanceof Error ? error.message : "Unknown error",
+        contextAvailable: !!context,
+        envAvailable: !!context?.env
+      }), 
+      { status: 500 }
+    );
   }
 }

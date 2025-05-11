@@ -9,14 +9,26 @@
 // Configure route to use Edge Runtime for Cloudflare Pages
 export const runtime = 'edge';
 
-export async function GET() {
+// Define the context interface for Cloudflare Pages Functions
+interface PagesFunctionContext {
+  env: {
+    OPENAI_API_KEY: string;
+    NODE_ENV?: string;
+    [key: string]: string | undefined;
+  };
+}
+
+export async function GET(request: Request, context: PagesFunctionContext) {
   try {
-    // Basic info about the environment
+    // Basic info about the environment - accessed via Cloudflare context and fallback to process.env
     const envInfo = {
-      environment: process.env.NODE_ENV,
-      apiKeyExists: !!process.env.OPENAI_API_KEY,
+      environment: context?.env?.NODE_ENV || process.env.NODE_ENV,
+      apiKeyExists: !!context?.env?.OPENAI_API_KEY,
+      processEnvApiKeyExists: !!process.env.OPENAI_API_KEY, // for debugging comparison
       edgeRuntime: true,
       timestamp: new Date().toISOString(),
+      contextAvailable: !!context,
+      envObjectAvailable: !!context?.env,
     };
 
     // Test if fetch is available
@@ -72,6 +84,10 @@ export async function GET() {
         fetchTest,
         headersTest,
         streamTest,
+        environmentAccess: {
+          process_env: typeof process !== 'undefined' && !!process.env,
+          context_env: !!context?.env
+        }
       }, null, 2),
       {
         headers: {
