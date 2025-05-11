@@ -10,7 +10,13 @@ export async function POST(request: Request) {
     const { messages, tools } = await request.json();
     console.log("Received messages:", messages);
 
-    const openai = new OpenAI();
+    // Check if API key is available and log (safely - only for debugging)
+    const apiKey = process.env.OPENAI_API_KEY;
+    console.log("API Key available:", !!apiKey);
+    
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
 
     const events = await openai.responses.create({
       model: MODEL,

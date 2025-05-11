@@ -6,8 +6,10 @@ export const runtime = 'edge';
 // Don't initialize OpenAI at the top level to prevent build errors
 
 export async function POST(request: Request) {
-  // Initialize OpenAI inside the handler for runtime only
-  const openai = new OpenAI();
+  // Initialize OpenAI inside the handler for runtime only with explicit API key
+  const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
   const { vectorStoreId, fileId } = await request.json();
   try {
     const vectorStore = await openai.vectorStores.files.create(

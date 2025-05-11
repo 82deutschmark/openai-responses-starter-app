@@ -15,12 +15,13 @@ This file tracks all significant changes made to the OpenAI Responses Starter Ap
 - Set up development environment
   - Configured OpenAI API key in `.env` file
   - Successfully launched local development server
-- Fixed Cloudflare Pages deployment - 2025-05-11 at 13:48
+- Fixed Cloudflare Pages deployment - 2025-05-11 at 14:12
   - Added `.node-version` file to specify Node.js 18.18.0
   - Resolved compatibility issue with Next.js 15.2.3 requirements
   - Fixed build output path mismatch in `wrangler.toml` (using `/static` instead of `/public`)
   - Added required Edge Runtime configuration to all API routes
-  - Added `nodejs_compat` compatibility flag to fix Node.js built-in modules errors
+  - Added `nodejs_compat` compatibility flag with required `compatibility_date`
+  - Fixed 500 errors by explicitly providing OpenAI API key in all API routes
   - Modified API route files to initialize OpenAI client at runtime instead of build time
   - Fixed deployment error related to OpenAI API key during build process
 - Verified OpenAI model configuration - 2025-05-11 at 12:50

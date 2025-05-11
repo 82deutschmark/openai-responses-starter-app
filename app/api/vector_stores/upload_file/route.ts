@@ -4,7 +4,9 @@ import OpenAI from "openai";
 export const runtime = 'edge';
 
 export async function POST(request: Request) {
-  const openai = new OpenAI();
+  const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
   const { fileObject } = await request.json();
 
   try {

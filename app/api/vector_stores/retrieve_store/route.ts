@@ -6,8 +6,10 @@ export const runtime = 'edge';
 // Don't initialize OpenAI at the top level to prevent build errors
 
 export async function GET(request: Request) {
-  // Initialize OpenAI inside the handler for runtime only
-  const openai = new OpenAI();
+  // Initialize OpenAI inside the handler for runtime only with explicit API key
+  const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
   
   const { searchParams } = new URL(request.url);
   const vectorStoreId = searchParams.get("vector_store_id");
