@@ -1,18 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Enable static output generation for Cloudflare Pages
-  output: 'export',
+  // Remove the 'output: export' option as we're using @cloudflare/next-on-pages
+  // which handles the API routes properly
   
   // Disable image optimization since Cloudflare Pages doesn't support it
   images: {
     unoptimized: true,
   },
   
-  // Disable Next.js server features if using static export
-  // Comment these out if you're using @cloudflare/next-on-pages
+  // Configure experimental features
   experimental: {
-    // Allows Edge API routes
-    serverActions: true,
+    // Enable server actions properly
+    serverActions: {
+      allowedOrigins: ['localhost:3000', '*.pages.dev']
+    }
   }
 };
 
