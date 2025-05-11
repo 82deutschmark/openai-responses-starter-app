@@ -3,19 +3,18 @@ import OpenAI from "openai";
 // Configure route to use Edge Runtime for Cloudflare Pages
 export const runtime = 'edge';
 
-// Define the context interface for Cloudflare Pages Functions
-interface PagesFunctionContext {
-  env: {
-    OPENAI_API_KEY: string;
-    [key: string]: string;
-  };
-}
-
-export async function POST(request: Request, context: PagesFunctionContext) {
-  // Access API key from Cloudflare Pages context instead of process.env
-  const apiKey = context?.env?.OPENAI_API_KEY;
+export async function POST(request: Request) {
+  // Access Cloudflare Pages context - in production this will be available via request
+  const context = (request as any).context;
+  
+  // Try to get API key from Cloudflare context, fall back to process.env for local development
+  let apiKey = context?.env?.OPENAI_API_KEY;
   if (!apiKey) {
-    console.error("OPENAI_API_KEY environment variable not set in Cloudflare Pages context");
+    apiKey = process.env.OPENAI_API_KEY;
+  }
+  
+  if (!apiKey) {
+    console.error("OPENAI_API_KEY environment variable not set");
     return new Response("API key configuration error", { status: 500 });
   }
 

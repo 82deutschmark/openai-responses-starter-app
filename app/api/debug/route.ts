@@ -9,27 +9,32 @@
 // Configure route to use Edge Runtime for Cloudflare Pages
 export const runtime = 'edge';
 
-// Define the context interface for Cloudflare Pages Functions
-interface PagesFunctionContext {
-  env: {
-    OPENAI_API_KEY: string;
-    NODE_ENV?: string;
-    [key: string]: string | undefined;
-  };
-}
+// Note: We'll access the context through the request headers
+// This is compatible with both Next.js and Cloudflare Pages
 
-export async function GET(request: Request, context: PagesFunctionContext) {
+export async function GET(request: Request) {
+  // In Cloudflare Pages Functions, the context is available as part of the request
+  // We'll use any to avoid type errors while still allowing the code to work in both environments
+  const context = (request as any).context;
   try {
-    // Basic info about the environment - accessed via Cloudflare context and fallback to process.env
+    // Basic info about the environment - try both access patterns for maximum compatibility
     const envInfo = {
-      environment: context?.env?.NODE_ENV || process.env.NODE_ENV,
-      apiKeyExists: !!context?.env?.OPENAI_API_KEY,
-      processEnvApiKeyExists: !!process.env.OPENAI_API_KEY, // for debugging comparison
+      environment: process.env.NODE_ENV,
+      apiKeyExists: false, // Will be updated below
+      processEnvApiKeyExists: !!process.env.OPENAI_API_KEY,
       edgeRuntime: true,
       timestamp: new Date().toISOString(),
       contextAvailable: !!context,
       envObjectAvailable: !!context?.env,
     };
+    
+    // Try to access Cloudflare environment variables if context is available
+    if (context?.env) {
+      envInfo.apiKeyExists = !!context.env.OPENAI_API_KEY;
+      if (context.env.NODE_ENV) {
+        envInfo.environment = context.env.NODE_ENV;
+      }
+    }
 
     // Test if fetch is available
     let fetchTest;

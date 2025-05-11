@@ -6,28 +6,30 @@ import { NextResponse } from "next/server";
 // Configure route to use Edge Runtime for Cloudflare Pages
 export const runtime = 'edge';
 
-// Define the context interface for Cloudflare Pages Functions
-interface PagesFunctionContext {
-  env: {
-    OPENAI_API_KEY: string;
-    [key: string]: string;
-  };
-  // Other context properties might be available
-}
-
-export async function POST(request: Request, context: PagesFunctionContext) {
+export async function POST(request: Request) {
+  // Access Cloudflare Pages context - in production this will be available via request
+  // We cast to any to avoid type errors while still allowing access to the context
+  const context = (request as any).context;
   try {
     const { messages, tools } = await request.json();
     console.log("Received messages:", messages);
 
-    // Check if API key is available from the Cloudflare Pages Functions context
-    // CRITICAL: Access env vars via context.env, not process.env in Cloudflare Pages Functions
-    const apiKey = context?.env?.OPENAI_API_KEY;
+    // Get API key - try Cloudflare Pages context first, fall back to process.env for local development
+    // CRITICAL: In Cloudflare Pages Functions, env vars must be accessed via context.env
+    let apiKey = context?.env?.OPENAI_API_KEY;
+    
+    // Fall back to process.env only in development/local environment
     if (!apiKey) {
-      console.error("OPENAI_API_KEY environment variable not set in Cloudflare Pages context");
+      apiKey = process.env.OPENAI_API_KEY;
+    }
+    
+    if (!apiKey) {
+      console.error("OPENAI_API_KEY environment variable not set");
       return NextResponse.json({ error: "API key configuration error" }, { status: 500 });
     }
-    console.log("API Key available from Cloudflare Pages context:", !!apiKey);
+    
+    console.log("API Key available:", !!apiKey);
+    console.log("Context available:", !!context);
     
     // Create a ReadableStream that will handle our fetch + streaming
     const stream = new ReadableStream({
