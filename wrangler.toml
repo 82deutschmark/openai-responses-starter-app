@@ -6,7 +6,8 @@ name = "openai-responses-starter-app"
 # This is the path to deployment artifacts
 pages_build_output_dir = ".vercel/output/static"
 
-# Enable Node.js compatibility mode
+# Required compatibility settings for Cloudflare Workers
+compatibility_date = "2025-05-11"
 compatibility_flags = ["nodejs_compat"]
 
 # Environment variables
