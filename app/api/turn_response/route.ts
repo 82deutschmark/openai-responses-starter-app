@@ -54,6 +54,7 @@ export async function POST(request: Request) {
           
           const reader = response.body.getReader();
           const decoder = new TextDecoder();
+          const encoder = new TextEncoder();
           
           // Process the stream
           while (true) {
@@ -89,7 +90,7 @@ export async function POST(request: Request) {
                   event: parsedData.type,
                   data: parsedData,
                 });
-                controller.enqueue(`data: ${formattedData}\n\n`);
+                controller.enqueue(encoder.encode(`data: ${formattedData}\n\n`));
               } catch (e) {
                 console.error('Error parsing event data:', e);
               }

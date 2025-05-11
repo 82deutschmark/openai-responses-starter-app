@@ -43,7 +43,9 @@
 - [x] **USER ACTION (concurrent with Playwright):** Monitor Cloudflare Function logs.
 - [ ] Consult Cloudflare Pages & Next.js documentation on environment variables (as needed). (**Largely resolved by debug endpoint**) 
 - [x] Identify root cause of the API failure. (**Initial root cause of API key access seems resolved. New root cause: TypeError: This ReadableStream did not return bytes.**)
-- [ ] **CASCADE ACTION:** Add detailed logging within the stream processing loop in `app/api/turn_response/route.ts` to inspect chunk type and content.
+- [ ] **CASCADE ACTION:** Add detailed logging within the stream processing loop in `app/api/turn_response/route.ts` to inspect chunk type and content. (**Partially done, but user's diagnosis points to a different part of the stream handling - the *outgoing* stream to client.**)
+- [x] **DIAGNOSIS CONFIRMED by USER:** The `ReadableStream` created by the API route must `enqueue` `Uint8Array`s, not strings. The current code enqueues strings.
+- [ ] **CASCADE ACTION:** Modify `app/api/turn_response/route.ts` to use `new TextEncoder().encode()` for data passed to `controller.enqueue()`.
 - [ ] **USER ACTION (after code changes):** Redeploy and re-test by sending a message.
-- [ ] **USER ACTION (concurrently):** Monitor Cloudflare logs for new stream chunk details.
+- [ ] **USER ACTION (concurrently):** Monitor Cloudflare logs. The `TypeError` should be resolved.
 - [ ] Implement final code fixes (if any, e.g., removing fallback).
