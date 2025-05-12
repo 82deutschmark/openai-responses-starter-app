@@ -72,8 +72,13 @@ This file tracks all significant changes made to the OpenAI Responses Starter Ap
 - **ENHANCED LOGGING:** Updated logging to clearly indicate the use of the Responses API throughout the request lifecycle.
 
 ### ADDITIONAL FIX - 2025-05-11 (11:08 PM)
-- **FIXED REQUIRED PARAMETER:** Added the required `vector_store_ids` parameter (with an empty array as default) to the `file_search` tool, as the Responses API requires this parameter even when no vector store IDs are available.
+- **FIXED REQUIRED PARAMETER:** Added the required `vector_store_ids` parameter to the `file_search` tool, as the Responses API requires this parameter.
 - **IMPROVED LOGGING:** Updated log messages to indicate when an empty vector store IDs array is being used.
+
+### CRITICAL FIX - 2025-05-11 (11:19 PM)
+- **PROPER TOOLS HANDLING:** Fixed the `file_search` tool implementation based on OpenAI documentation - discovered that `vector_store_ids` must be a non-empty array containing at least one valid vector store ID.
+- **CONDITIONAL TOOLS INCLUSION:** Changed code to only include the `file_search` tool when a valid vector store ID is available, completely omitting it otherwise.
+- **FIXED TYPE DEFINITIONS:** Updated TypeScript types to correctly represent the API requirements where `vector_store_ids` is a required field that must contain at least one valid ID.
 
 ### Planned Changes
 - TBD based on specific requirements
