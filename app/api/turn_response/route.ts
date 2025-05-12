@@ -26,26 +26,49 @@ export async function POST(request: Request) {
       async start(controller) {
         try {
           console.log('Attempting to use API Key (obtained from process.env)');
+          // Construct tools
+          const tools = [
+            { type: "web_search" as const },
+            { type: "file_search" as const }, // Initially, just specify the type
+          ];
+
+          // Conditionally add vector_store_ids if the environment variable is set and valid
+          const vectorStoreId = process.env.OPENAI_VECTOR_STORE_ID;
+          if (vectorStoreId && vectorStoreId.trim() !== "" && vectorStoreId.toLowerCase() !== 'null' && vectorStoreId.toLowerCase() !== 'undefined') {
+            if (tools[1].type === 'file_search') { // Ensure we're modifying the file_search tool
+              (tools[1] as any).vector_store_ids = [vectorStoreId];
+            }
+          } else {
+            console.log('OPENAI_VECTOR_STORE_ID is not set or is invalid; not adding vector_store_ids to file_search tool.');
+            // If OPENAI_VECTOR_STORE_ID is required by your setup and not present,
+            // you might want to throw an error here or handle it appropriately.
+          }
+
+          const requestBodyForOpenAI = {
+            model: MODEL,
+            messages: messages,
+            stream: true,
+            tools: tools,
+          };
+
+          console.log('Request body to OpenAI (excluding stream true):', JSON.stringify({ ...requestBodyForOpenAI, stream: undefined }, null, 2));
+
           // Direct fetch to OpenAI API (most compatible with Edge runtime)
-          const response = await fetch('https://api.openai.com/v1/responses', {
+          const response = await fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${apiKey}`,
-              'OpenAI-Beta': 'responses=v1'
+              'OpenAI-Beta': 'assistants=v2', // Required for Assistants API v2 features like file_search
             },
-            body: JSON.stringify({
-              model: MODEL,
-              input: messages,
-              tools,
-              stream: true,
-              parallel_tool_calls: false,
-            }),
+            body: JSON.stringify(requestBodyForOpenAI),
           });
           
           if (!response.ok) {
-            const errorData = await response.text();
-            throw new Error(`OpenAI API error: ${response.status} ${errorData}`);
+            const errorBody = await response.text(); // Get the full error response body as text
+            console.error(`OpenAI API error: ${response.status} ${response.statusText}`, errorBody);
+            // Throw an error that includes the status and the detailed error body
+            throw new Error(`OpenAI API error: ${response.status} ${response.statusText} - ${errorBody}`);
           }
           
           if (!response.body) {

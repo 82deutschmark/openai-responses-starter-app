@@ -45,7 +45,14 @@
 - [x] Identify root cause of the API failure. (**Initial root cause of API key access seems resolved. New root cause: TypeError: This ReadableStream did not return bytes.**)
 - [ ] **CASCADE ACTION:** Add detailed logging within the stream processing loop in `app/api/turn_response/route.ts` to inspect chunk type and content. (**Partially done, but user's diagnosis points to a different part of the stream handling - the *outgoing* stream to client.**)
 - [x] **DIAGNOSIS CONFIRMED by USER:** The `ReadableStream` created by the API route must `enqueue` `Uint8Array`s, not strings. The current code enqueues strings.
-- [ ] **CASCADE ACTION:** Modify `app/api/turn_response/route.ts` to use `new TextEncoder().encode()` for data passed to `controller.enqueue()`.
+- [x] **CASCADE ACTION:** Modify `app/api/turn_response/route.ts` to use `new TextEncoder().encode()` for data passed to `controller.enqueue()`. --> **FIXED 'ReadableStream did not return bytes' error.**
 - [ ] **USER ACTION (after code changes):** Redeploy and re-test by sending a message.
-- [ ] **USER ACTION (concurrently):** Monitor Cloudflare logs. The `TypeError` should be resolved.
+- [x] **USER ACTION (concurrently):** Monitor Cloudflare logs. The `TypeError` should be resolved. --> **TypeError resolved. New OpenAI 400 Error: `Invalid type for 'tools[1].vector_store_ids[0]': expected a string, but got null instead.`**
+- [ ] **DIAGNOSIS:** OpenAI 400 error likely due to `process.env.OPENAI_VECTOR_STORE_ID` being `undefined`, leading to `vector_store_ids: [null]` in JSON. Also, OpenAI endpoint `v1/responses` might be incorrect; should be `v1/chat/completions`.
+- [ ] **CASCADE ACTION:** Modify `app/api/turn_response/route.ts`:
+    - Change OpenAI API endpoint to `https://api.openai.com/v1/chat/completions`.
+    - Adjust logic for `vector_store_ids` to prevent `[null]` if `OPENAI_VECTOR_STORE_ID` is not a valid string.
+    - Add console logging for the request body sent to OpenAI.
+    - Improve error logging for `!response.ok` from OpenAI.
+- [ ] **USER ACTION (after code changes):** Redeploy and re-test by sending a message. Monitor Cloudflare logs. Hope for success!
 - [ ] Implement final code fixes (if any, e.g., removing fallback).
