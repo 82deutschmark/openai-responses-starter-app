@@ -80,5 +80,8 @@ This file tracks all significant changes made to the OpenAI Responses Starter Ap
 - **CONDITIONAL TOOLS INCLUSION:** Changed code to only include the `file_search` tool when a valid vector store ID is available, completely omitting it otherwise.
 - **FIXED TYPE DEFINITIONS:** Updated TypeScript types to correctly represent the API requirements where `vector_store_ids` is a required field that must contain at least one valid ID.
 
+### BUILD FIX - 2025-05-11 (11:25 PM)
+- **ESLINT FIX:** Changed `let toolsForResponses` to `const toolsForResponses` to resolve ESLint error during build, as the variable is only modified with array operations (push) and never reassigned.
+
 ### Planned Changes
 - TBD based on specific requirements

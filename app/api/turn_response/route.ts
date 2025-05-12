@@ -22,7 +22,7 @@ export async function POST(request: Request) {
       | { type: "file_search", vector_store_ids: string[] }; // vector_store_ids must be non-empty
       
     // Initialize tools array with only web_search
-    let toolsForResponses: ResponsesApiTool[] = [
+    const toolsForResponses: ResponsesApiTool[] = [
       { type: "web_search" },
       // file_search will be conditionally added only if we have a valid vector_store_id
     ];
