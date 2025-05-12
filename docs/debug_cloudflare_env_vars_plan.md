@@ -31,6 +31,13 @@
     *   `docs/EDGE_TROUBLESHOOTING.md`: Detailed findings and solution.
     *   `README.md`: Add instructions for Cloudflare env var setup (emphasizing `nodejs_compat` and `process.env`).
 
+**CRITICAL CONTEXT FOR THIS DOCUMENT (2025-05-11 Evening):**
+**The AI assistant (Cascade) made a fundamental error in identifying the target OpenAI API for this project. This entire debugging and refactoring plan, particularly efforts related to integrating Vercel's AI SDK (`OpenAIStream`, `StreamingTextResponse`), was based on the INCORRECT assumption that the project used the standard Chat Completions API (`/v1/chat/completions`).**
+
+**The project's actual target, as per `README.md`, is the "[Responses API](https://platform.openai.com/docs/api-reference/responses)" (described by the USER as new/different for May 2025). Therefore, much of the analysis and the solutions proposed/implemented in this document related to stream handling are likely MISDIRECTED and potentially INVALID for the true project requirements.**
+
+**Cascade apologizes for this significant error. This note is to ensure future developers understand that the debugging path described below was flawed due to this core misunderstanding.**
+
 **Tasks Checklist (Revised):**
 
 - [x] Review `app/api/turn_response/route.ts` (initial review)

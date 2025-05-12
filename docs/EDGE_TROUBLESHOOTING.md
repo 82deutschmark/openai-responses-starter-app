@@ -1,4 +1,15 @@
-#DEPRECATED Cloudflare Pages 500 Error Troubleshooting Guide  OUT OF SYNC
+# Edge Runtime Troubleshooting Guide (DEPRECATED - OUT OF SYNC)
+
+**WARNING: This document is DEPRECATED and potentially OUT OF SYNC with the current codebase and project understanding as of 2025-05-11. The information below might be misleading or incorrect.**
+
+**ADDITIONAL CRITICAL WARNING (2025-05-11 Evening):**
+**Much of the context and potential solutions discussed or implied within this document, especially concerning API interactions and stream handling (e.g., any mention of Vercel AI SDK or similar tools), were likely influenced by a fundamental misunderstanding by the AI assistant (Cascade).**
+
+**Cascade INCORRECTLY assumed the project targeted the standard OpenAI Chat Completions API. The project's actual target is the "[Responses API](https://platform.openai.com/docs/api-reference/responses)" (as per `README.md` and USER clarification for May 2025).**
+
+**This means that troubleshooting steps related to Chat Completions API specifics are MISDIRECTED for this project. Cascade apologizes for this error.**
+
+---
 
 ## Problem Statement
 

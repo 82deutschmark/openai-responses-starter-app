@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { OpenAIStream, StreamingTextResponse, StreamData } from 'ai'; // Added StreamData for potential future use with onFinal
+import { OpenAIStream, StreamingTextResponse } from 'ai'; 
 
 // Configure route to use Edge Runtime for Cloudflare Pages
 export const runtime = 'edge';
@@ -16,61 +16,41 @@ export async function POST(request: Request) {
     }
     console.log("[API HANDLER] OPENAI_API_KEY obtained from process.env:", !!apiKey);
 
-    const constructedToolsForOpenAI = [
-      {
-        type: "function" as const,
-        function: {
-          name: "web_search",
-          description: "Search the web for relevant and up-to-date information.",
-          parameters: {
-            type: "object" as const,
-            properties: {
-              query: {
-                type: "string" as const,
-                description: "The search query to use.",
-              },
-            },
-            required: ["query"],
-          },
-        },
-      },
-      {
-        type: "function" as const,
-        function: {
-          name: "file_search",
-          description: "Search through provided files or vector stores for relevant information.",
-          parameters: {
-            type: "object" as const,
-            properties: {
-              query: {
-                type: "string" as const,
-                description: "The search query to use against the files.",
-              },
-            },
-            required: ["query"],
-          },
-        },
-      },
+        // Define proper types for Responses API tools
+    type ResponsesApiTool = 
+      | { type: "web_search" } 
+      | { type: "file_search", vector_store_ids?: string[] };
+      
+    // Use the properly formatted tools for the Responses API
+    const toolsForResponses: ResponsesApiTool[] = [
+      { type: "web_search" },
+      { type: "file_search" },
     ];
 
     const vectorStoreId = process.env.OPENAI_VECTOR_STORE_ID;
     if (vectorStoreId && vectorStoreId.trim() !== "" && vectorStoreId.toLowerCase() !== 'null' && vectorStoreId.toLowerCase() !== 'undefined') {
       console.log('[API HANDLER] OPENAI_VECTOR_STORE_ID is set to:', vectorStoreId);
+      // If we have a vector store ID, update the file_search tool with it
+      toolsForResponses[1] = { 
+        type: "file_search" as const,
+        vector_store_ids: [vectorStoreId]
+      };
     } else {
       console.log('[API HANDLER] OPENAI_VECTOR_STORE_ID is not set or is invalid.');
     }
 
+    // Format request body for the Responses API
     const requestBodyForOpenAI = {
       model: requestBody.model || 'gpt-4o',
-      messages: requestBody.messages,
+      input: requestBody.messages, // Note: 'input' instead of 'messages' for Responses API
       stream: true,
-      tools: constructedToolsForOpenAI,
+      tools: toolsForResponses,
     };
 
     console.log('[API HANDLER] Request body to OpenAI (excluding stream true):', JSON.stringify({ ...requestBodyForOpenAI, stream: undefined }, null, 2));
 
-    console.log('[API HANDLER] Attempting to fetch from OpenAI...');
-    const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+    console.log('[API HANDLER] Attempting to fetch from OpenAI Responses API...');
+    const openaiResponse = await fetch('https://api.openai.com/v1/responses', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -97,9 +77,10 @@ export async function POST(request: Request) {
 
     try {
       // Use OpenAIStream to process the response with detailed logging callbacks
+      // Note: We're using OpenAIStream with the Responses API - this is what was missing before
       const stream = OpenAIStream(openaiResponse.clone(), { // Clone the response if it's used elsewhere or if OpenAIStream might consume it fully before another part needs it
         async onStart() {
-          console.log("[AI SDK STREAM] Stream started.");
+          console.log("[AI SDK STREAM] Stream started with Responses API.");
         },
         async onToken(token) {
           // Log only a small part of the token to avoid excessive logging
@@ -112,10 +93,9 @@ export async function POST(request: Request) {
           console.log("[AI SDK STREAM] Final callback triggered. Completion:", completion);
           // If you use StreamData, you can append to it here
         },
-        // experimental_onToolCall: async (...) => { ... }
       });
 
-      console.log('[API HANDLER] OpenAIStream instance created. Preparing StreamingTextResponse.');
+      console.log('[API HANDLER] OpenAIStream instance created with Responses API. Preparing StreamingTextResponse.');
       return new StreamingTextResponse(stream);
 
     } catch (sdkError) {

@@ -27,7 +27,7 @@ const Chat: React.FC<ChatProps> = ({ items, onSendMessage }) => {
       onSendMessage(inputMessageText);
       setinputMessageText("");
     }
-  }, [onSendMessage, inputMessageText]);
+  }, [onSendMessage, inputMessageText, isComposing]);
 
   useEffect(() => {
     scrollToBottom();

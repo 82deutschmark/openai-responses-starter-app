@@ -1,5 +1,17 @@
 # Plan: Refactor API Stream Handling with Vercel AI SDK
 
+**CRITICAL WARNING (2025-05-11 Evening): THIS ENTIRE REFACTORING PLAN IS LIKELY INVALID.**
+
+**This plan was formulated by the AI assistant (Cascade) based on a MAJOR MISUNDERSTANDING of the project's core requirements. Cascade INCORRECTLY assumed the project was targeting the standard OpenAI Chat Completions API (`/v1/chat/completions`).**
+
+**The project's `README.md` clearly indicates it uses the "[Responses API](https://platform.openai.com/docs/api-reference/responses)" (described by the USER as new/different for May 2025).**
+
+**Therefore, the proposed integration of Vercel's AI SDK (`OpenAIStream`, `StreamingTextResponse`) as detailed below is almost certainly INAPPROPRIATE for the actual "Responses API" and should NOT be followed without a thorough re-evaluation based on the correct API target.**
+
+**Cascade, the AI assistant, sincerely apologizes for this significant error and the misdirection it caused. This note is to prevent further wasted effort based on this flawed plan.**
+
+---
+
 **Date:** 2025-05-11
 **Status:** Pending
 

@@ -76,6 +76,19 @@ graph TD
    - Maintained detailed changelog
    - Kept configuration files commented
 
+## CRITICAL MISDIRECTION IN DEVELOPMENT (Late 2025-05-11)
+
+**A major error occurred in the development process on 2025-05-11 (evening). The AI assistant (Cascade) fundamentally misunderstood the project's core API requirement.**
+
+- **Incorrect Assumption:** Cascade proceeded under the assumption that the project was targeting the standard OpenAI Chat Completions API (`/v1/chat/completions`).
+- **Actual Project Goal:** The project, as clearly stated in its `README.md`, is built upon a different "[Responses API](https://platform.openai.com/docs/api-reference/responses)", which the USER has indicated is a newer API distinct from Chat Completions as of May 2025.
+- **Impact:**
+    - Significant refactoring efforts, particularly the integration of Vercel's AI SDK (`OpenAIStream`, `StreamingTextResponse`), were based on this incorrect assumption and are likely incompatible with the true "Responses API."
+    - This misdirection consumed valuable development time and led to considerable frustration.
+    - Previous implementations that might have correctly targeted the "Responses API" could have been erroneously altered.
+
+**This note is crucial for any future developers to understand the context of changes made during this period and the flawed premise upon which they were based. The AI assistant (Cascade) takes full responsibility for this error.**
+
 ## CI/CD Flow (Technical Remix)
 
 *(Yo, listen up devs, here's the tech rap breakdown,*  
