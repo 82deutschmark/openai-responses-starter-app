@@ -22,9 +22,10 @@ export async function POST(request: Request) {
       | { type: "file_search", vector_store_ids?: string[] };
       
     // Use the properly formatted tools for the Responses API
+    // Note: file_search ALWAYS needs vector_store_ids, even if empty
     const toolsForResponses: ResponsesApiTool[] = [
       { type: "web_search" },
-      { type: "file_search" },
+      { type: "file_search", vector_store_ids: [] }, // Always include empty array by default
     ];
 
     const vectorStoreId = process.env.OPENAI_VECTOR_STORE_ID;
@@ -36,7 +37,8 @@ export async function POST(request: Request) {
         vector_store_ids: [vectorStoreId]
       };
     } else {
-      console.log('[API HANDLER] OPENAI_VECTOR_STORE_ID is not set or is invalid.');
+      console.log('[API HANDLER] OPENAI_VECTOR_STORE_ID is not set or is invalid. Using empty vector_store_ids array.');
+      // Vector store ID remains an empty array, which is already set by default
     }
 
     // Format request body for the Responses API

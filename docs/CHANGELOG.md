@@ -71,5 +71,9 @@ This file tracks all significant changes made to the OpenAI Responses Starter Ap
 - **PROPER TYPING:** Added TypeScript types for Responses API tools to ensure type safety and prevent errors.
 - **ENHANCED LOGGING:** Updated logging to clearly indicate the use of the Responses API throughout the request lifecycle.
 
+### ADDITIONAL FIX - 2025-05-11 (11:08 PM)
+- **FIXED REQUIRED PARAMETER:** Added the required `vector_store_ids` parameter (with an empty array as default) to the `file_search` tool, as the Responses API requires this parameter even when no vector store IDs are available.
+- **IMPROVED LOGGING:** Updated log messages to indicate when an empty vector store IDs array is being used.
+
 ### Planned Changes
 - TBD based on specific requirements
