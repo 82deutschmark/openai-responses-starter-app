@@ -1,4 +1,3 @@
-import { MODEL } from "@/config/constants";
 import { NextResponse } from "next/server";
 // Simplified approach without direct OpenAI SDK dependency
 // We'll use fetch directly for maximum compatibility with Edge runtime
@@ -8,8 +7,9 @@ export const runtime = 'edge';
 
 export async function POST(request: Request) {
   try {
-    const { messages, tools } = await request.json();
-    console.log("Received messages:", messages);
+    const requestBody = await request.json();
+    // messages and tools from the incoming request are available here if needed, e.g., requestBody.messages, requestBody.tools
+    console.log("Received messages:", requestBody.messages);
 
     // Get API key - with nodejs_compat, process.env is the way in Cloudflare Pages Functions
     const apiKey = process.env.OPENAI_API_KEY;
@@ -26,29 +26,26 @@ export async function POST(request: Request) {
       async start(controller) {
         try {
           console.log('Attempting to use API Key (obtained from process.env)');
-          // Construct tools
-          const tools = [
+          // Construct tools to be sent to OpenAI
+          const constructedToolsForOpenAI = [
             { type: "web_search" as const },
-            { type: "file_search" as const }, // Initially, just specify the type
+            { type: "file_search" as const },
           ];
 
-          // Conditionally add vector_store_ids if the environment variable is set and valid
           const vectorStoreId = process.env.OPENAI_VECTOR_STORE_ID;
           if (vectorStoreId && vectorStoreId.trim() !== "" && vectorStoreId.toLowerCase() !== 'null' && vectorStoreId.toLowerCase() !== 'undefined') {
-            if (tools[1].type === 'file_search') { // Ensure we're modifying the file_search tool
-              (tools[1] as any).vector_store_ids = [vectorStoreId];
+            if (constructedToolsForOpenAI[1].type === 'file_search') {
+              (constructedToolsForOpenAI[1] as any).vector_store_ids = [vectorStoreId];
             }
           } else {
             console.log('OPENAI_VECTOR_STORE_ID is not set or is invalid; not adding vector_store_ids to file_search tool.');
-            // If OPENAI_VECTOR_STORE_ID is required by your setup and not present,
-            // you might want to throw an error here or handle it appropriately.
           }
 
           const requestBodyForOpenAI = {
-            model: MODEL,
-            messages: messages,
+            model: requestBody.model || 'gpt-4o',
+            messages: requestBody.messages,
             stream: true,
-            tools: tools,
+            tools: constructedToolsForOpenAI, // Use the correctly named variable
           };
 
           console.log('Request body to OpenAI (excluding stream true):', JSON.stringify({ ...requestBodyForOpenAI, stream: undefined }, null, 2));
