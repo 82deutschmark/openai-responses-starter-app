@@ -49,10 +49,16 @@
 - [ ] **USER ACTION (after code changes):** Redeploy and re-test by sending a message.
 - [x] **USER ACTION (concurrently):** Monitor Cloudflare logs. The `TypeError` should be resolved. --> **TypeError resolved. New OpenAI 400 Error: `Invalid type for 'tools[1].vector_store_ids[0]': expected a string, but got null instead.`**
 - [ ] **DIAGNOSIS:** OpenAI 400 error likely due to `process.env.OPENAI_VECTOR_STORE_ID` being `undefined`, leading to `vector_store_ids: [null]` in JSON. Also, OpenAI endpoint `v1/responses` might be incorrect; should be `v1/chat/completions`.
-- [ ] **CASCADE ACTION:** Modify `app/api/turn_response/route.ts`:
+- [x] **CASCADE ACTION:** Modify `app/api/turn_response/route.ts`:
     - Change OpenAI API endpoint to `https://api.openai.com/v1/chat/completions`.
     - Adjust logic for `vector_store_ids` to prevent `[null]` if `OPENAI_VECTOR_STORE_ID` is not a valid string.
     - Add console logging for the request body sent to OpenAI.
     - Improve error logging for `!response.ok` from OpenAI.
+    - Resolve ESLint `no-unused-vars` error. --> **DONE, build successful.**
 - [ ] **USER ACTION (after code changes):** Redeploy and re-test by sending a message. Monitor Cloudflare logs. Hope for success!
+- [x] **DIAGNOSIS (NEW):** OpenAI 400 Error: `Missing required parameter: 'tools[0].function'`. The `tools` (e.g. `web_search`, `file_search`) sent to `/v1/chat/completions` must be of `type: "function"` and include a `function` object with `name`, `description`, and `parameters`.
+- [ ] **CASCADE ACTION:** Modify `app/api/turn_response/route.ts`:
+    - Redefine `web_search` and `file_search` in `constructedToolsForOpenAI` to be `type: "function"` with appropriate `function` schemas.
+    - Remove the `OpenAI-Beta: 'assistants=v2'` header.
+- [ ] **USER ACTION (after code changes):** Redeploy and re-test. Monitor logs. This should fix the request schema. Next step if model calls tools: handle `tool_calls` response.
 - [ ] Implement final code fixes (if any, e.g., removing fallback).

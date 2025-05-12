@@ -28,17 +28,57 @@ export async function POST(request: Request) {
           console.log('Attempting to use API Key (obtained from process.env)');
           // Construct tools to be sent to OpenAI
           const constructedToolsForOpenAI = [
-            { type: "web_search" as const },
-            { type: "file_search" as const },
+            {
+              type: "function" as const,
+              function: {
+                name: "web_search",
+                description: "Search the web for relevant and up-to-date information.",
+                parameters: {
+                  type: "object" as const,
+                  properties: {
+                    query: {
+                      type: "string" as const,
+                      description: "The search query to use.",
+                    },
+                  },
+                  required: ["query"],
+                },
+              },
+            },
+            {
+              type: "function" as const,
+              function: {
+                name: "file_search",
+                description: "Search through provided files or vector stores for relevant information.",
+                parameters: {
+                  type: "object" as const,
+                  properties: {
+                    query: {
+                      type: "string" as const,
+                      description: "The search query to use against the files.",
+                    },
+                    // vector_store_id is handled by backend logic if OPENAI_VECTOR_STORE_ID is set for Assistants.
+                    // For function calling, if a specific vector store ID needs to be targetable by the model's call,
+                    // it should be a parameter here. For simplicity now, we'll omit it from function params
+                    // and assume the backend implementation of 'file_search' would use the env var if set.
+                  },
+                  required: ["query"],
+                },
+              },
+            },
           ];
 
+          // The OPENAI_VECTOR_STORE_ID logic previously here was for a different tool structure.
+          // If file_search function needs to target a specific vector store ID chosen by the model,
+          // that ID should be a parameter in its schema, and the model would fill it.
+          // If the vector_store_id is fixed by the environment, the *implementation* of the file_search function
+          // on the backend would use process.env.OPENAI_VECTOR_STORE_ID.
+          // The console log for OPENAI_VECTOR_STORE_ID is still useful for general info.
           const vectorStoreId = process.env.OPENAI_VECTOR_STORE_ID;
           if (vectorStoreId && vectorStoreId.trim() !== "" && vectorStoreId.toLowerCase() !== 'null' && vectorStoreId.toLowerCase() !== 'undefined') {
-            if (constructedToolsForOpenAI[1].type === 'file_search') {
-              (constructedToolsForOpenAI[1] as any).vector_store_ids = [vectorStoreId];
-            }
+            console.log('OPENAI_VECTOR_STORE_ID is set to:', vectorStoreId, '(Note: file_search function call does not currently take this as a direct parameter from model, backend implementation would use it)');
           } else {
-            console.log('OPENAI_VECTOR_STORE_ID is not set or is invalid; not adding vector_store_ids to file_search tool.');
+            console.log('OPENAI_VECTOR_STORE_ID is not set or is invalid.');
           }
 
           const requestBodyForOpenAI = {
@@ -55,8 +95,7 @@ export async function POST(request: Request) {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${apiKey}`,
-              'OpenAI-Beta': 'assistants=v2', // Required for Assistants API v2 features like file_search
+              'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
             },
             body: JSON.stringify(requestBodyForOpenAI),
           });
