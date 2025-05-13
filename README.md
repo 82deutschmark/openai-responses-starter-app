@@ -1,6 +1,6 @@
 # Responses starter app
+I, the user, cloned this from https://github.com/openai/openai-responses-starter-app.
 
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 ![NextJS](https://img.shields.io/badge/Built_with-NextJS-blue)
 ![OpenAI API](https://img.shields.io/badge/Powered_by-OpenAI_API-orange)
 
@@ -16,32 +16,13 @@ Features:
 - Streaming responses & tool calls
 - Display annotations
 
-This app is meant to be used as a starting point to build a conversational assistant that you can customize to your needs.
-Our prefered model is `gpt-4.1-nano-2025-04-14`.
+This app was meant to be used as a starting point to build a conversational assistant. I am customizing it for my needs.
+My prefered model is `gpt-4.1-nano-2025-04-14`.
+I use GitHub for version control.
+I use Cloudflare Workers for deployment.
+
 
 ## How to use
-
-1. **Set up the OpenAI API:**
-
-   - If you're new to the OpenAI API, [sign up for an account](https://platform.openai.com/signup).
-   - Follow the [Quickstart](https://platform.openai.com/docs/quickstart) to retrieve your API key.
-
-2. **Set the OpenAI API key:**
-
-   2 options:
-
-   - Set the `OPENAI_API_KEY` environment variable [globally in your system](https://platform.openai.com/docs/libraries#create-and-export-an-api-key)
-   - Set the `OPENAI_API_KEY` environment variable in the project: Create a `.env` file at the root of the project and add the following line (see `.env.example` for reference):
-
-   ```bash
-   OPENAI_API_KEY=<your_api_key>
-   ```
-
-3. **Clone the Repository:**
-
-   ```bash
-   git clone https://github.com/openai/openai-responses-starter-app.git
-   ```
 
 4. **Install dependencies:**
 
@@ -59,10 +40,6 @@ Our prefered model is `gpt-4.1-nano-2025-04-14`.
 
    The app will be available at [`http://localhost:3000`](http://localhost:3000).
 
-## Contributing
 
-You are welcome to open issues or submit PRs to improve this app, however, please note that we may not review all suggestions.
-
-## License
 
 This project is licensed under the MIT License. See the LICENSE file for details.

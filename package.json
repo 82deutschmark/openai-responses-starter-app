@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "preview": "opennextjs-cloudflare build && wrangler dev",
+    "deploy": "opennextjs-cloudflare build && wrangler deploy",
+    "cf-typegen": "wrangler types --env-interface Env cloudflare-env.d.ts"
   },
   "dependencies": {
     "@npmcli/fs": "^4.0.0",
@@ -23,7 +26,7 @@
     "highlight.js": "^11.11.1",
     "lucide-react": "^0.441.0",
     "next": "^15.2.3",
-    "openai": "^4.87.3",
+    "openai": "^4.98.0",
     "partial-json": "^0.1.7",
     "react": "^18",
     "react-dom": "^18",
@@ -38,6 +41,8 @@
     "zustand": "^5.0.2"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240515.0",
+    "@opennextjs/cloudflare": "^1.0.2",
     "@types/node": "^20.16.10",
     "@types/react": "^18.3.10",
     "@types/react-dom": "^18",
@@ -46,6 +51,7 @@
     "eslint-config-next": "^15.0.1",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5.6.2"
+    "typescript": "^5.6.2",
+    "wrangler": "^4.14.4"
   }
 }

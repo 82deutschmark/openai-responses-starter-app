@@ -18,3 +18,11 @@ This file tracks all significant changes made to the OpenAI Responses Starter Ap
 
 ### Planned Changes
 - TBD based on specific requirements
+
+### Cloudflare Workers Deployment Setup - 2025-05-12
+- Configured project for Cloudflare Workers deployment
+  - Added OpenNext Cloudflare adapter (@opennextjs/cloudflare)
+  - Created wrangler.toml with Workers configuration
+  - Added open-next.config.ts for adapter defaults
+  - Updated package.json with preview/deploy scripts
+  - Optimized Next.js config for Cloudflare compatibility
