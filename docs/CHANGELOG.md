@@ -1,27 +1,52 @@
+<!--
+This changelog follows the conventions of Keep a Changelog (https://keepachangelog.com/en/1.0.0/).
+It tracks all significant changes made to the OpenAI Responses Starter App project.
+To add new entries, append them under a new date heading (YYYY-MM-DD) in reverse chronological order (newest first).
+Use the following sections as needed: Added, Changed, Fixed, Removed, Deprecated, Security.
+-->
 # Changelog
 
-This file tracks all significant changes made to the OpenAI Responses Starter App project.
+## [Unreleased] - YYYY-MM-DD
 
-## May 13th, we discovered Cloudflaere was impractical for this project and switched to Vercel. It worked first try no problem.  I was awestruck.  
+## 2025-05-13
 
-Our preferred model is `gpt-4.1-nano-2025-04-14`.
+### Added
+- Configured project for AdMob/AdSense integration by placing `ads.txt` in the `public` directory.
+- Created a plan document (`admob_changelog_plan.md`) for AdMob integration and changelog refactoring.
+- Integrated the main Google AdSense script into `app/layout.tsx` using `next/script` for global ad readiness.
 
-### Initial Setup - 2025-05-10
-- Created changelog to track project modifications
-- Conducted initial project assessment
-  - NextJS-based chat interface
-  - Integration with OpenAI Responses API
-  - Support for tools (web search, file search, function calling)
-  - Streaming response handling
-  - State management via Zustand
-- Set up development environment
-  - Configured OpenAI API key in `.env` file
-  - Successfully launched local development server
+### Changed
+- **Major Deployment Shift:** Switched primary deployment target from Cloudflare Workers to Vercel due to practical challenges with Cloudflare. Vercel deployment was successful on the first attempt.
+  *Note: Previous Cloudflare-specific configurations in `wrangler.toml`, `open-next.config.ts`, and `package.json` scripts related to Cloudflare deployment might be deprecated or subject to removal in future updates if Vercel remains the primary deployment platform.*
+- Reformatted `CHANGELOG.md` to follow Keep a Changelog conventions, improve readability, and ensure reverse chronological order.
+- Updated site metadata (title and description) in `app/layout.tsx` by user. (Approx. 19:21 2025-05-13)
+- Modified `public/openai_logo.svg`: Changed fill to pink (#E75480) and added a dashed purple (#8A2BE2) stroke.
 
-### Planned Changes
-- TBD based on specific requirements
+### Technical Notes
+- Preferred OpenAI model: `gpt-4.1-nano-2025-04-14`.
 
-### Cloudflare Workers Deployment Setup - 2025-05-13
+## 2025-05-10
+
+### Added
+- **Initial Project Setup & Assessment**
+  - Created `CHANGELOG.md` to track project modifications.
+  - Conducted initial project assessment, identifying key features:
+    - Next.js-based chat interface.
+    - Integration with OpenAI Responses API.
+    - Support for tools (web search, file search, function calling).
+    - Streaming response handling.
+    - State management via Zustand.
+  - Set up the development environment:
+    - Configured OpenAI API key in `.env` file.
+    - Successfully launched the local development server.
+
+### Removed
+- Removed previous "Planned Changes" section as it was a placeholder (TBD).
+
+<!--
+Previous entry regarding Cloudflare setup before the switch to Vercel on 2025-05-13:
+
+### Cloudflare Workers Deployment Setup - (Pre-Vercel Switch)
 - Configured project for Cloudflare Workers deployment
   - Added OpenNext Cloudflare adapter (@opennextjs/cloudflare)
   - Created wrangler.toml with Workers configuration
@@ -36,3 +61,4 @@ Our preferred model is `gpt-4.1-nano-2025-04-14`.
   - Configured GitHub integration with Cloudflare Workers
     - Build command: `npm install && npx opennextjs-cloudflare build`
     - Deploy command: `npx wrangler deploy`
+-->

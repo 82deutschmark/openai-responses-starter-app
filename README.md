@@ -1,3 +1,9 @@
+<!--
+This README file provides an overview of the OpenAI Responses Starter App, its features, setup, and customization notes.
+It is intended to help users and contributors understand the project's purpose and how to work with it.
+Keep this file updated with any major changes to the project structure, features, or deployment strategy.
+-->
+
 # Responses starter app
 I, the user, cloned this from https://github.com/openai/openai-responses-starter-app.
 
@@ -19,27 +25,54 @@ Features:
 This app was meant to be used as a starting point to build a conversational assistant. I am customizing it for my needs.
 My prefered model is `gpt-4.1-nano-2025-04-14`.
 I use GitHub for version control.
-I use Cloudflare Workers for deployment.
+I use Cloudflare Workers for deployment normally, but Vercel was much easier so I switched.
 
+### Monetization with Google AdSense/AdMob
 
-## How to use
+This project can be monetized using Google AdSense (which is how AdMob typically integrates with web applications).
 
-4. **Install dependencies:**
+**1. `ads.txt` File:**
+   - An `ads.txt` file is crucial for advertisers to verify that your site has authorized them to serve ads. It helps prevent ad fraud.
+   - This file must be accessible at the root of your domain (e.g., `yourdomain.com/ads.txt`).
+   - In this Next.js project, the `ads.txt` file has been placed in the `public` directory (`public/ads.txt`). Files in this directory are automatically served from the root.
+   - Ensure your Google AdSense publisher ID (and any other authorized ad network IDs) are correctly listed in this file. The format is typically `google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0`.
 
-   Run in the project root:
+**2. Google AdSense Account Setup:**
+   - Sign up for a Google AdSense account if you don't have one.
+   - Add your website to AdSense and complete their site verification and approval process.
 
-   ```bash
-   npm install
-   ```
+**3. Integrating AdSense Code into Next.js:**
+   - **Main AdSense Script:** AdSense will provide a primary script tag for site initialization (often for "Auto ads"). This script needs to be included in the `<head>` of all your pages.
+     - The recommended way to add this in Next.js is by using the `next/script` component. You can add it to your `pages/_app.tsx` (or `_app.js`) for global inclusion, or to `pages/_document.tsx` (or `_document.js`).
+     - Example for `pages/_app.tsx`:
+       ```typescript
+       import Script from 'next/script';
+       import type { AppProps } from 'next/app';
+       import '@/app/globals.css'; // Adjust path as needed
 
-5. **Run the app:**
+       function MyApp({ Component, pageProps }: AppProps) {
+         return (
+           <>
+             <Script
+               async
+               src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_PUBLISHER_ID"
+               crossOrigin="anonymous"
+               strategy="afterInteractive" // Or "lazyOnload"
+             />
+             <Component {...pageProps} />
+           </>
+         );
+       }
 
-   ```bash
-   npm run dev
-   ```
+       export default MyApp;
+       ```
+     - Replace `ca-pub-YOUR_PUBLISHER_ID` with your actual AdSense publisher ID.
 
-   The app will be available at [`http://localhost:3000`](http://localhost:3000).
+   - **Ad Units:**
+     - Within your AdSense account, you can create specific "Ad units" for different ad placements (e.g., banners, in-article ads).
+     - AdSense will provide a JavaScript code snippet for each ad unit.
+     - To display these ads, you can create a reusable React component (e.g., `components/AdDisplay.tsx`) that takes an `adSlotId` and other relevant props, and then renders the ad unit's script.
+     - You would then use this `<AdDisplay />` component in your pages where you want the specific ad to appear.
 
-
-
-This project is licensed under the MIT License. See the LICENSE file for details.
+**4. AdSense Program Policies:**
+   - Always adhere to Google's AdSense Program Policies to ensure your account remains in good standing.
