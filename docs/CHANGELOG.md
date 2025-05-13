@@ -2,7 +2,9 @@
 
 This file tracks all significant changes made to the OpenAI Responses Starter App project.
 
-## [Unreleased]
+## May 13th, we discovered Cloudflaere was impractical for this project and switched to Vercel. It worked first try no problem.  I was awestruck.  
+
+Our preferred model is `gpt-4.1-nano-2025-04-14`.
 
 ### Initial Setup - 2025-05-10
 - Created changelog to track project modifications
