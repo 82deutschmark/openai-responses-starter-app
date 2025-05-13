@@ -21,6 +21,8 @@ Use the following sections as needed: Added, Changed, Fixed, Removed, Deprecated
 - Reformatted `CHANGELOG.md` to follow Keep a Changelog conventions, improve readability, and ensure reverse chronological order.
 - Updated site metadata (title and description) in `app/layout.tsx` by user. (Approx. 19:21 2025-05-13)
 - Modified `public/openai_logo.svg`: Changed fill to pink (#E75480) and added a dashed purple (#8A2BE2) stroke.
+- Modified `public/openai_logo.svg` again (Approx. 19:25 2025-05-13): Changed main logo fill to yellow (#FFD700), removed previous dashed stroke, and added a black border to the white background circle.
+- Modified `public/openai_logo.svg` a third time (Approx. 19:30 2025-05-13): Added a black dotted outline (stroke-width: 1, stroke-dasharray: "2 2") to the main yellow logo shape.
 
 ### Technical Notes
 - Preferred OpenAI model: `gpt-4.1-nano-2025-04-14`.
