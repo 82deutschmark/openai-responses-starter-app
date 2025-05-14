@@ -18,10 +18,10 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Mark's gpt-4.1-nano-2025-04-14",
+  title: "Mark's gpt-4.1",
   description: "Iteration of the OpenAI Responses API",
   icons: {
-    icon: "/openai_logo.svg",
+    icon: "/gptpluspro.svg",
   },
 };
 
