@@ -1,4 +1,5 @@
-## Summary
+<!--
+This was NOT a good solution!  
 
 OpenAI Responses Starter App is a Next.js 14/15 application that you can deploy to Cloudflare Workers by using the official OpenNext Cloudflare adapter (@opennextjs/cloudflare) in its 1.0.0-beta release, which transforms your Next.js build output into a Workers-compatible bundle via the Node.js compatibility layer. Deployment consists of installing the adapter and Wrangler CLI, creating a `wrangler.toml` with the adapter’s entrypoint and flags, adding an `open-next.config.ts` for OpenNext defaults, updating your `package.json` with preview/deploy scripts, and then running `npm run build`/`preview`/`deploy` to push to a `*.workers.dev` subdomain or custom domain.
 
@@ -96,3 +97,4 @@ Add these scripts to your `package.json`:
 [3]: https://opennext.js.org/cloudflare?utm_source=chatgpt.com "Cloudflare - OpenNext"
 [4]: https://blog.cloudflare.com/deploying-nextjs-apps-to-cloudflare-workers-with-the-opennext-adapter/ "Deploy your Next.js app to Cloudflare Workers with the Cloudflare adapter for OpenNext"
 [5]: https://github.com/openai/openai-responses-starter-app "GitHub - openai/openai-responses-starter-app: Starter app to build with the OpenAI Responses API"
+-->

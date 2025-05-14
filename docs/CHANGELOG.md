@@ -8,6 +8,11 @@ Use the following sections as needed: Added, Changed, Fixed, Removed, Deprecated
 
 ## [Unreleased] - YYYY-MM-DD
 
+## 2025-05-14
+
+### Changed
+- **UX Improvement:** Temporarily hid the "File Search", "Web Search", and "Functions" sections in the `ToolsPanel` component to simplify the user interface. These sections were commented out in `components/tools-panel.tsx` and can be re-enabled later if needed.
+
 ## 2025-05-13
 
 ### Added

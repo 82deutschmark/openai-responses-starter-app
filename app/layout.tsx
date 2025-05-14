@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Script from 'next/script';
 import "./globals.css";
+import { SessionProvider } from "next-auth/react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -32,19 +33,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6692143545933427"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
-        <div className="flex h-screen bg-gray-200 w-full flex-col  text-stone-900">
-          <main>{children}</main>
-        </div>
-      </body>
+      <SessionProvider>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <Script
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6692143545933427"
+            crossOrigin="anonymous"
+            strategy="afterInteractive"
+          />
+          <div className="flex h-screen bg-gray-200 w-full flex-col  text-stone-900">
+            <main>{children}</main>
+          </div>
+        </body>
+      </SessionProvider>
     </html>
   );
 }

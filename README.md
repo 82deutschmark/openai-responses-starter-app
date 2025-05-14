@@ -16,16 +16,29 @@ It leverages built-in tools ([web search](https://platform.openai.com/docs/guide
 Features:
 
 - Multi-turn conversation handling
-- Web search tool configuration
-- Vector store creation & file upload for use with the file search tool
-- Function calling
 - Streaming responses & tool calls
 - Display annotations
+- (Currently Hidden in UI) Web search tool configuration
+- (Currently Hidden in UI) Vector store creation & file upload for use with the file search tool
+- (Currently Hidden in UI) Function calling
 
 This app was meant to be used as a starting point to build a conversational assistant. I am customizing it for my needs.
 My prefered model is `gpt-4.1-nano-2025-04-14`.
 I use GitHub for version control.
 I use Cloudflare Workers for deployment normally, but Vercel was much easier so I switched.
+
+**Important Security Note for `next-auth`:**
+When using `next-auth` for authentication, it is **CRITICAL** to set a `NEXTAUTH_SECRET` environment variable in your production environment (e.g., Vercel environment variables) and also in your `.env` file for local development (especially if testing with HTTPS). This secret is used to sign cookies and tokens, ensuring the security of your user sessions.
+
+You can generate a strong secret using the following command in your terminal:
+```bash
+openssl rand -hex 32
+```
+Add this generated secret to your `.env` file like so:
+```
+NEXTAUTH_SECRET=your_generated_secret_here
+```
+And ensure it is also set in your Vercel deployment environment variables.
 
 ### Monetization with Google AdSense/AdMob
 
