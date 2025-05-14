@@ -5,7 +5,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Script from 'next/script';
 import "./globals.css";
-import { SessionProvider } from "next-auth/react";
+// import { SessionProvider } from "next-auth/react"; // No longer directly used here
+import SessionProviderWrapper from "./session-provider-wrapper"; // Import the new wrapper
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,7 +34,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <SessionProvider>
+      <SessionProviderWrapper>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
@@ -47,7 +48,7 @@ export default function RootLayout({
             <main>{children}</main>
           </div>
         </body>
-      </SessionProvider>
+      </SessionProviderWrapper>
     </html>
   );
 }
