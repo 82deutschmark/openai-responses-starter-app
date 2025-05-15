@@ -1,33 +1,53 @@
 "use client";
 import Assistant from "@/components/assistant";
 import ToolsPanel from "@/components/tools-panel";
-import { Menu, X } from "lucide-react";
+import { Settings, X } from "lucide-react";
 import { useState } from "react";
 
 export default function Main() {
-  const [isToolsPanelOpen, setIsToolsPanelOpen] = useState(false);
+  const [isMobilePanelOpen, setIsMobilePanelOpen] = useState(false);
+  const [isRightPanelOpen, setIsRightPanelOpen] = useState(false);
 
   return (
-    <div className="flex justify-center h-screen">
+    <div className="flex justify-center h-screen relative">
       <div className="w-full md:w-[70%]">
         <Assistant />
       </div>
-      <div className=" hidden md:block w-[30%]">
-        <ToolsPanel />
-      </div>
-      {/* Hamburger menu for small screens */}
-      <div className="absolute top-4 right-4 md:hidden">
-        <button onClick={() => setIsToolsPanelOpen(true)}>
-          <Menu size={24} />
+
+      <div className="absolute top-4 right-4 z-50">
+        <button 
+          onClick={() => {
+            if (window.innerWidth < 768) {
+              setIsMobilePanelOpen(!isMobilePanelOpen);
+              setIsRightPanelOpen(false);
+            } else {
+              setIsRightPanelOpen(!isRightPanelOpen);
+              setIsMobilePanelOpen(false);
+            }
+          }}
+          className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700"
+        >
+          {isMobilePanelOpen || isRightPanelOpen ? <X size={24} /> : <Settings size={24} />}
         </button>
       </div>
-      {/* Overlay panel for ToolsPanel on small screens */}
-      {isToolsPanelOpen && (
-        <div className="fixed inset-0 z-50 flex justify-end bg-black bg-opacity-30">
-          <div className="w-full bg-white h-full p-4">
-            <button className="mb-4" onClick={() => setIsToolsPanelOpen(false)}>
-              <X size={24} />
-            </button>
+
+      <div
+        className={`
+          fixed top-0 right-0 h-full bg-white dark:bg-gray-800 shadow-lg z-40
+          transform transition-transform duration-300 ease-in-out
+          w-full md:w-[300px] lg:w-[350px] xl:w-[400px]
+          ${isRightPanelOpen ? "translate-x-0" : "translate-x-full"}
+          hidden md:block
+        `}
+      >
+        <div className="p-4 h-full">
+          <ToolsPanel />
+        </div>
+      </div>
+      
+      {isMobilePanelOpen && (
+        <div className="fixed inset-0 z-30 flex justify-end bg-black bg-opacity-30 md:hidden">
+          <div className="w-full bg-white dark:bg-gray-800 h-full p-4">
             <ToolsPanel />
           </div>
         </div>
