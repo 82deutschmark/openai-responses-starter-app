@@ -2,6 +2,7 @@
 import Assistant from "@/components/assistant";
 import ToolsPanel from "@/components/tools-panel";
 import { Settings, X } from "lucide-react";
+import ImageGenerator from "./image-generator"; // Added for image generation UI (GPT-4.1)
 import { useState } from "react";
 
 export default function Main() {
@@ -12,6 +13,12 @@ export default function Main() {
     <div className="flex justify-center h-screen relative">
       <div className="w-full md:w-[70%]">
         <Assistant />
+        {/*
+          ImageGenerator: Allows users to generate images via OpenAI's gpt-image-1 model.
+          Author/Model: GPT-4.1
+          Date: 2025-05-19
+        */}
+        <ImageGenerator />
       </div>
 
       <div className="absolute top-4 right-4 z-50">

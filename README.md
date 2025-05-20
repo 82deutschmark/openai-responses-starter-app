@@ -23,7 +23,7 @@ Features:
 - (Currently Hidden in UI) Function calling
 
 This app was meant to be used as a starting point to build a conversational assistant. I am customizing it for my needs.
-My prefered model is `gpt-4.1-nano-2025-04-14`.
+My prefered model is `gpt-4.1-nano-2025-04-14`. For image generation, I use `gpt-image-1` 
 I use GitHub for version control.
 I use Cloudflare Workers for deployment normally, but Vercel was much easier so I switched.
 
