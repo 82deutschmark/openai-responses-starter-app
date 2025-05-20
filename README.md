@@ -27,6 +27,28 @@ My prefered model is `gpt-4.1-nano-2025-04-14`. For image generation, I use `gpt
 I use GitHub for version control.
 I use Cloudflare Workers for deployment normally, but Vercel was much easier so I switched.
 
+## Image Generation Feature (Added 2025-05-19 by GPT-4.1)
+
+This app now supports generating images using OpenAI's gpt-image-1 model. Users can:
+- Enter a prompt
+- Select the number of images (1-10)
+- Choose image size (`1024x1024`, `1024x1536`, `1536x1024`, or `auto`)
+- Select quality (high, standard, low)
+
+### How to Use
+1. Go to the main page and find the **Image Generator** section.
+2. Enter your prompt and select your preferred options.
+3. Click **Generate Image**.
+4. Generated images will appear below, with download links.
+
+### Technical Details
+- Images are generated server-side via `/api/generate-image` using your OpenAI API key (set in `.env`).
+- Only supported sizes are available in the UI to prevent API errors.
+- The app uses Next.js, is deployed to Cloudflare Workers via OpenNext, and is fully CI/CD enabled with GitHub integration.
+- Image rendering uses Next.js `<Image />` for optimal performance and bandwidth.
+
+See `docs/changelog.md` for a detailed list of changes.
+
 **Important Security Note for `next-auth`:**
 When using `next-auth` for authentication, it is **CRITICAL** to set a `NEXTAUTH_SECRET` environment variable in your production environment (e.g., Vercel environment variables) and also in your `.env` file for local development (especially if testing with HTTPS). This secret is used to sign cookies and tokens, ensuring the security of your user sessions.
 

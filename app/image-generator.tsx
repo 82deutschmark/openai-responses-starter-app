@@ -11,12 +11,24 @@
 
 "use client";
 import React, { useState } from "react";
+// Use Next.js Image for optimal performance (GPT-4.1)
+import Image from "next/image";
 
+/**
+ * ImageGenerator component
+ * Allows users to generate images using OpenAI's gpt-image-1 model.
+ * Features:
+ * - User inputs prompt, number of images, size, and quality.
+ * - Accessible form with proper label associations.
+ * - Download links use sanitized prompt-based filenames.
+ *
+ * Author: GPT-4.1
+ * Last updated: 2025-05-19
+ */
 export default function ImageGenerator() {
   const [prompt, setPrompt] = useState("");
   const [n, setN] = useState(2); // default 2 images
   const [size, setSize] = useState("1024x1024");
-  const [customSize, setCustomSize] = useState("");
   const [quality, setQuality] = useState("high");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -36,7 +48,7 @@ export default function ImageGenerator() {
     setError("");
     setImages([]);
     try {
-      const chosenSize = size === "Custom" && customSize ? customSize : size;
+      const chosenSize = size;
       const res = await fetch("/api/generate-image", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -66,35 +78,48 @@ export default function ImageGenerator() {
   return (
     <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 my-8 max-w-2xl w-full mx-auto">
       <h2 className="text-xl font-bold mb-4 text-blue-700 dark:text-blue-200">Image Generator</h2>
-      <form onSubmit={handleGenerate} className="flex flex-col md:flex-row md:items-end gap-4 flex-wrap">
-        <div className="flex-1 min-w-[200px]">
-          <label className="block text-sm font-medium mb-1">Prompt</label>
+      <form onSubmit={handleGenerate} className="flex flex-col md:flex-row gap-4 items-end mt-4">
+        {/* Prompt field */}
+        <div className="flex flex-col flex-1 min-w-[200px]">
+          <label htmlFor="prompt-input" className="text-sm font-medium mb-1">Prompt</label>
           <textarea
-            className="border rounded-md p-2 min-h-[60px] w-full text-black"
-            placeholder="Describe the image you want to generate..."
+            id="prompt-input"
+            name="prompt"
+            className="border rounded-md p-2 text-black resize-y min-h-[48px]"
             value={prompt}
             onChange={e => setPrompt(e.target.value)}
+            placeholder="Describe your image..."
             required
+            rows={2}
+            autoComplete="off"
           />
         </div>
+        {/* Number of images field */}
         <div className="flex flex-col min-w-[120px]">
-          <label className="text-sm font-medium mb-1">Number of Images</label>
+          <label htmlFor="number-input" className="text-sm font-medium mb-1">Number</label>
           <input
+            id="number-input"
+            name="number"
             type="number"
             min={1}
             max={10}
+            className="border rounded-md p-2 text-black"
             value={n}
             onChange={e => setN(Number(e.target.value))}
-            className="border rounded-md p-2 text-black"
             required
+            autoComplete="off"
           />
         </div>
+        {/* Size field */}
         <div className="flex flex-col min-w-[120px]">
-          <label className="text-sm font-medium mb-1">Size</label>
+          <label htmlFor="size-select" className="text-sm font-medium mb-1">Size</label>
           <select
+            id="size-select"
+            name="size"
             className="border rounded-md p-2 text-black"
             value={size}
             onChange={e => setSize(e.target.value)}
+            autoComplete="off"
           >
             {presetSizes.map(sz => (
               <option key={sz} value={sz}>{sz}</option>
@@ -102,18 +127,23 @@ export default function ImageGenerator() {
           </select>
           <span className="text-xs text-gray-500 mt-1">Supported: 1024x1024, 1024x1536, 1536x1024, auto</span>
         </div>
+        {/* Quality field */}
         <div className="flex flex-col min-w-[120px]">
-          <label className="text-sm font-medium mb-1">Quality</label>
+          <label htmlFor="quality-select" className="text-sm font-medium mb-1">Quality</label>
           <select
+            id="quality-select"
+            name="quality"
             className="border rounded-md p-2 text-black"
             value={quality}
             onChange={e => setQuality(e.target.value)}
+            autoComplete="off"
           >
             <option value="high">High</option>
             <option value="standard">Medium</option>
             <option value="low">Low</option>
           </select>
         </div>
+        {/* Submit button */}
         <button
           type="submit"
           disabled={loading}
@@ -127,12 +157,34 @@ export default function ImageGenerator() {
         <div className="text-gray-500 mt-6">No images to display. Try generating some!</div>
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-        {images.map((src, idx) => (
-          <div key={idx} className="flex flex-col items-center">
-            <img src={src} alt={`Generated ${idx+1}`} className="rounded shadow w-full h-auto" />
-            <a href={src} download={`generated-image-${idx+1}.png`} className="mt-2 text-blue-600 underline">Download</a>
-          </div>
-        ))}
+        {images.map((src, idx) => {
+          // Helper to sanitize prompt for filenames
+          function sanitizeFilename(text: string) {
+            return text
+              .toLowerCase()
+              .replace(/[^a-z0-9\-_]+/g, '-') // Replace non-alphanum with dash
+              .replace(/^-+|-+$/g, '')         // Trim leading/trailing dashes
+              .replace(/-+/g, '-')             // Collapse multiple dashes
+              .slice(0, 32)                    // Limit length
+              || 'image';
+          }
+          const baseFilename = sanitizeFilename(prompt);
+          const filename = `${baseFilename || 'image'}-${idx+1}.png`;
+          return (
+            <div key={idx} className="flex flex-col items-center">
+              {/* Use Next.js <Image> for optimal performance. Handles both URL and base64 images. */}
+              <Image
+                src={src}
+                alt={prompt ? `${prompt} (${idx+1})` : `Generated ${idx+1}`}
+                width={512}
+                height={512}
+                className="rounded shadow w-full h-auto"
+                unoptimized={src.startsWith('data:')}
+              />
+              <a href={src} download={filename} className="mt-2 text-blue-600 underline">Download</a>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

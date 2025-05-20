@@ -11,14 +11,21 @@ export default function Main() {
 
   return (
     <div className="flex justify-center h-screen relative">
-      <div className="w-full md:w-[70%]">
-        <Assistant />
-        {/*
-          ImageGenerator: Allows users to generate images via OpenAI's gpt-image-1 model.
-          Author/Model: GPT-4.1
-          Date: 2025-05-19
-        */}
-        <ImageGenerator />
+      {/* Responsive two-column layout: Assistant (chat) and ImageGenerator side by side on desktop, stacked on mobile. */}
+      <div className="w-full md:w-[70%] flex flex-col md:flex-row gap-6 mt-4">
+        {/* Chat/Assistant Pane */}
+        <div className="flex-1 min-w-[320px]">
+          <Assistant />
+        </div>
+        {/* Image Generator Pane */}
+        <div className="flex-1 min-w-[320px]">
+          {/*
+            ImageGenerator: Allows users to generate images via OpenAI's gpt-image-1 model.
+            Author/Model: GPT-4.1
+            Date: 2025-05-19
+          */}
+          <ImageGenerator />
+        </div>
       </div>
 
       <div className="absolute top-4 right-4 z-50">
