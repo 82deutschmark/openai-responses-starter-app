@@ -76,16 +76,21 @@ export default function ImageGenerator() {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 my-8 max-w-2xl w-full mx-auto">
-      <h2 className="text-xl font-bold mb-4 text-blue-700 dark:text-blue-200">Image Generator</h2>
-      <form onSubmit={handleGenerate} className="flex flex-col md:flex-row gap-4 items-end mt-4">
+    <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-6 w-full h-full flex flex-col justify-start border border-gray-100 dark:border-gray-800">
+      {/* Card-style container for Image Generator (GPT-4.1, 2025-05-19) */}
+      <h2 className="text-xl font-bold mb-6 text-blue-700 dark:text-blue-200 tracking-tight">Image Generator</h2>
+      <form
+        onSubmit={handleGenerate}
+        className="flex flex-col md:flex-row md:items-end gap-4 md:gap-6 w-full"
+        style={{ flexWrap: "wrap" }}
+      >
         {/* Prompt field */}
-        <div className="flex flex-col flex-1 min-w-[200px]">
+        <div className="flex flex-col flex-1 min-w-[180px]">
           <label htmlFor="prompt-input" className="text-sm font-medium mb-1">Prompt</label>
           <textarea
             id="prompt-input"
             name="prompt"
-            className="border rounded-md p-2 text-black resize-y min-h-[48px]"
+            className="border rounded-md p-2 text-black resize-y min-h-[44px] focus:outline-blue-400"
             value={prompt}
             onChange={e => setPrompt(e.target.value)}
             placeholder="Describe your image..."
@@ -95,7 +100,7 @@ export default function ImageGenerator() {
           />
         </div>
         {/* Number of images field */}
-        <div className="flex flex-col min-w-[120px]">
+        <div className="flex flex-col min-w-[100px] max-w-[120px]">
           <label htmlFor="number-input" className="text-sm font-medium mb-1">Number</label>
           <input
             id="number-input"
@@ -103,7 +108,7 @@ export default function ImageGenerator() {
             type="number"
             min={1}
             max={10}
-            className="border rounded-md p-2 text-black"
+            className="border rounded-md p-2 text-black focus:outline-blue-400"
             value={n}
             onChange={e => setN(Number(e.target.value))}
             required
@@ -111,12 +116,12 @@ export default function ImageGenerator() {
           />
         </div>
         {/* Size field */}
-        <div className="flex flex-col min-w-[120px]">
+        <div className="flex flex-col min-w-[120px] max-w-[150px]">
           <label htmlFor="size-select" className="text-sm font-medium mb-1">Size</label>
           <select
             id="size-select"
             name="size"
-            className="border rounded-md p-2 text-black"
+            className="border rounded-md p-2 text-black focus:outline-blue-400"
             value={size}
             onChange={e => setSize(e.target.value)}
             autoComplete="off"
@@ -128,12 +133,12 @@ export default function ImageGenerator() {
           <span className="text-xs text-gray-500 mt-1">Supported: 1024x1024, 1024x1536, 1536x1024, auto</span>
         </div>
         {/* Quality field */}
-        <div className="flex flex-col min-w-[120px]">
+        <div className="flex flex-col min-w-[100px] max-w-[120px]">
           <label htmlFor="quality-select" className="text-sm font-medium mb-1">Quality</label>
           <select
             id="quality-select"
             name="quality"
-            className="border rounded-md p-2 text-black"
+            className="border rounded-md p-2 text-black focus:outline-blue-400"
             value={quality}
             onChange={e => setQuality(e.target.value)}
             autoComplete="off"
@@ -144,13 +149,16 @@ export default function ImageGenerator() {
           </select>
         </div>
         {/* Submit button */}
-        <button
-          type="submit"
-          disabled={loading}
-          className="bg-blue-600 text-white px-4 py-2 rounded-md disabled:opacity-50 min-w-[150px] mt-2 md:mt-0 self-end"
-        >
-          {loading ? "Generating..." : "Generate Image"}
-        </button>
+        <div className="flex flex-col md:justify-end w-full md:w-auto">
+          <button
+            type="submit"
+            disabled={loading}
+            className="bg-blue-600 text-white px-4 py-2 rounded-md disabled:opacity-50 w-full md:w-auto mt-2 md:mt-0"
+            style={{ minWidth: 150 }}
+          >
+            {loading ? "Generating..." : "Generate Image"}
+          </button>
+        </div>
       </form>
       {error && <div className="text-red-500 mt-2">{error}</div>}
       {images.length === 0 && !loading && (
