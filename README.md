@@ -5,7 +5,9 @@ Keep this file updated with any major changes to the project structure, features
 -->
 
 # Responses starter app
-I, the user, cloned this from https://github.com/openai/openai-responses-starter-app.
+I, the user, cloned this from https://github.com/openai/openai-responses-starter-app.  It is deployed currently at https://gptpluspro.com for authenticated users and payments via Stripe. It is a credit-based system to use OpenAI's API.
+Eventually I hope to integrate the new abilities of the responses API to use MCP tools and make this app the basis of a full-featured AI assistant named "Mr. Goodwin".  Mr. Goodwin will be like a head butler from Edwardian times, but with the ability to delegate all your tasks to AI staff members in the form of MCPs.  Mr. Goodwin is at the forefront of the agentic AI assistant movement by democratizing aristocracy.  
+
 
 ![NextJS](https://img.shields.io/badge/Built_with-NextJS-blue)
 ![OpenAI API](https://img.shields.io/badge/Powered_by-OpenAI_API-orange)
@@ -22,6 +24,10 @@ Features:
 - Vector store creation & file upload for use with the file search tool
 - Function calling
 - Image generation
+- Stripe credit purchase & refund automation via secure webhooks
+  - Credits awarded/refunded automatically based on Stripe events
+  - All product/price IDs managed in .env for safety and maintainability
+  - Security-reviewed, robust, and ready for production (2025-05-25)
 
 This app was meant to be used as a starting point to build a conversational assistant. I am customizing it for my needs.
 My prefered model is `gpt-4.1-nano-2025-04-14`. For image generation, I use `gpt-image-1` 
