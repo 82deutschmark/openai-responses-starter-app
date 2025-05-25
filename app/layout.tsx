@@ -4,6 +4,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Script from 'next/script';
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 // import { SessionProvider } from "next-auth/react"; // No longer directly used here
 import SessionProviderWrapper from "./session-provider-wrapper"; // Import the new wrapper
@@ -44,8 +45,9 @@ export default function RootLayout({
             crossOrigin="anonymous"
             strategy="afterInteractive"
           />
-          <div className="flex h-screen bg-gray-200 w-full flex-col  text-stone-900">
+          <div className="flex h-screen bg-gray-200 w-full flex-col text-stone-900">
             <main>{children}</main>
+            <Analytics />
           </div>
         </body>
       </SessionProviderWrapper>
