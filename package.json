@@ -39,7 +39,11 @@
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^1.0.0",
     "zod": "^3.23.8",
-    "zustand": "^5.0.2"
+    "zustand": "^5.0.2",
+    "@prisma/client": "^5.17.0",
+    "@next-auth/prisma-adapter": "^1.0.7",
+    "prisma": "^5.17.0",
+    "stripe": "^16.2.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240515.0",
