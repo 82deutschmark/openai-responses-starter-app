@@ -20,21 +20,21 @@ This plan outlines the steps to integrate a user credit system and Stripe paymen
 ### Phase 1: User and Credit Management (Database & Auth)
 
 *   **Task 1.1: Database Setup**
-    *   [ ] Choose and configure a database (e.g., PostgreSQL with Prisma, Supabase, Vercel Postgres, Neon). **Note:** Ensure the chosen solution/ORM provides effective connection pooling for serverless environments (See Pitfall #6).
-    *   [ ] Define `User` schema: `id` (PK), `googleId` (unique), `email` (unique), `name`, `credits` (integer, default: 0, serves as a denormalized balance).
-    *   [ ] Define `CreditPurchase` schema: `id` (PK), `userId` (FK to User), `stripePaymentIntentId` (unique, for idempotency), `creditsPurchased`, `amountPaid`, `currency`, `timestamp`.
-    *   [ ] Define `CreditSpend` schema: `id` (PK), `userId` (FK to User), `featureUsed` (e.g., 'imageGeneration'), `creditsSpent`, `timestamp`.
-    *   [ ] (Optional) Define `CreditAdjustment` schema for manual adjustments, refunds: `id` (PK), `userId` (FK to User), `amount` (can be negative), `reason`, `adminUserId`, `timestamp`.
-    *   [ ] Set up database connection and ORM/client (e.g., Prisma).
+    *   [x] Choose and configure a database (e.g., PostgreSQL with Prisma, Supabase, Vercel Postgres, Neon). **Note:** Ensure the chosen solution/ORM provides effective connection pooling for serverless environments (See Pitfall #6).
+    *   [x] Define `User` schema: `id` (PK), `googleId` (unique), `email` (unique), `name`, `credits` (integer, default: 0, serves as a denormalized balance).
+    *   [x] Define `CreditPurchase` schema: `id` (PK), `userId` (FK to User), `stripePaymentIntentId` (unique, for idempotency), `creditsPurchased`, `amountPaid`, `currency`, `timestamp`.
+    *   [x] Define `CreditSpend` schema: `id` (PK), `userId` (FK to User), `featureUsed` (e.g., 'imageGeneration'), `creditsSpent`, `timestamp`.
+    *   [x] (Optional) Define `CreditAdjustment` schema for manual adjustments, refunds: `id` (PK), `userId` (FK to User), `amount` (can be negative), `reason`, `adminUserId`, `timestamp`.
+    *   [x] Set up database connection and ORM/client (e.g., Prisma).
 *   **Task 1.2: NextAuth Modification**
-    *   [ ] Install NextAuth adapter for the chosen database (e.g., `@next-auth/prisma-adapter`) or implement custom callbacks.
-    *   [ ] Update `app/api/auth/[...nextauth]/route.ts`:
+    *   [x] Install NextAuth adapter for the chosen database (e.g., `@next-auth/prisma-adapter`) or implement custom callbacks.
+    *   [x] Update `app/api/auth/[...nextauth]/route.ts`:
         *   Configure the adapter.
         *   Modify `callbacks` (e.g., `session`, `jwt`) to:
             *   On sign-in/session creation, find or create the user in the database.
             *   Include `userId` (from your DB) and current `credits` (fetched from DB) in the session object. **Note:** This session `credits` value is for UI display and can be stale (See Pitfall #2, #5).
 *   **Task 1.3: API Endpoint for Credits**
-    *   [ ] Create `app/api/user/credits/route.ts`:
+    *   [x] Create `app/api/user/credits/route.ts`:
         *   `GET` method to return the current logged-in user's latest credit balance, fetched directly from the database.
 
 ### Phase 2: Stripe Integration for Purchasing Credits

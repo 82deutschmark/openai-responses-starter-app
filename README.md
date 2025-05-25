@@ -18,9 +18,10 @@ Features:
 - Multi-turn conversation handling
 - Streaming responses & tool calls
 - Display annotations
-- (Currently Hidden in UI) Web search tool configuration
-- (Currently Hidden in UI) Vector store creation & file upload for use with the file search tool
-- (Currently Hidden in UI) Function calling
+- Web search tool configuration
+- Vector store creation & file upload for use with the file search tool
+- Function calling
+- Image generation
 
 This app was meant to be used as a starting point to build a conversational assistant. I am customizing it for my needs.
 My prefered model is `gpt-4.1-nano-2025-04-14`. For image generation, I use `gpt-image-1` 
