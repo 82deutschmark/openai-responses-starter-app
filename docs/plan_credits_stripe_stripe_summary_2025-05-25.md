@@ -10,6 +10,12 @@
 ### Goal
 Enable users to purchase and spend credits in the OpenAI Responses Starter App using Stripe payments. Credits are required to access premium features (e.g., image generation). The system must be secure, auditable, and robust against race conditions and abuse.
 
+### Finalized Credit & Pricing Model
+- Packages: $1 = 1,000 credits; $5 = 5,050 credits; $10 = 11,000 credits; $20 = 23,000 credits; $50 = 62,500 credits; $100 = 140,000 credits (increasing bonus for larger packs)
+- Each package is a separate Stripe product, mapped to internal credit logic
+- Users only see “Credits remaining” and refill prompts, never tokens or cost per request
+- All pricing and token logic is handled internally; users experience a simple, bonus-driven credit system
+
 ### Functional Requirements
 - Google OAuth-based authentication (NextAuth).
 - Credits system: users have a credit balance, can purchase credits, and spend them on premium features.
